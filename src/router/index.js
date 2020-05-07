@@ -22,7 +22,7 @@ const StyledApp = styled.div`
   flex-direction: column;
   min-height: 100vh;
   flex: 1;
-  border: 1px solid black;
+  // border: 1px solid black;
 `;
 
 export default Router;
