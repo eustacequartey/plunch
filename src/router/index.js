@@ -3,19 +3,18 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Home, Order } from "../pages";
 import { Dashboard } from "../components/general";
 import styled from "styled-components";
+import AuthRouter from "./Auth";
+import AppRouter from "./AppFront";
 
-const Router = () => (
-  <StyledApp>
-    <BrowserRouter>
-      <Switch>
-        <Dashboard>
-          <Route path="/" exact={true} component={Home} />
-          <Route path="/order" component={Order} />
-        </Dashboard>
-      </Switch>
-    </BrowserRouter>
-  </StyledApp>
-);
+const Router = () => {
+  const isLoggedIn = false;
+  return (
+    <StyledApp>
+      {isLoggedIn && <AppRouter />}
+      {!isLoggedIn && <AuthRouter />}
+    </StyledApp>
+  );
+};
 
 const StyledApp = styled.div`
   display: flex;
