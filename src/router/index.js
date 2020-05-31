@@ -1,13 +1,11 @@
-import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { Home, Order } from "../pages";
-import { Dashboard } from "../components/general";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import AuthRouter from "./Auth";
 import AppRouter from "./AppFront";
+import { AppContext } from "../context/";
 
 const Router = () => {
-  const isLoggedIn = false;
+  const { isLoggedIn } = useContext(AppContext);
   return (
     <StyledApp>
       {isLoggedIn && <AppRouter />}

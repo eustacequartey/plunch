@@ -23,7 +23,7 @@ const OrderFlow = (props) => {
           {props.delivered ? (
             <Tag color="green">DELIVERED</Tag>
           ) : (
-            <Tag color="orange">ON THE WAY</Tag>
+            <Tag color="orange">PENDING</Tag>
           )}
         </div>
       </div>
