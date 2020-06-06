@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <div>
       <p>This is the home</p>
-      <CPModal />
+      {/* <CPModal /> */}
     </div>
   );
 };

@@ -3,10 +3,12 @@ import logo from "../../assets/images/plogosmall.png";
 
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
+import { notification } from "antd";
+import { CloseCircleOutlined } from "@ant-design/icons";
 
 const LOGIN = gql`
   mutation LOGIN($email: String!, $password: String!) {
-    addTodo(email: $email, password: $password) {
+    login(email: $email, password: $password) {
       token
       user {
         id
@@ -46,6 +48,7 @@ const LeftPane = () => {
 const RightPane = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [login] = useMutation(LOGIN);
 
   return (
     <div className="right">
@@ -79,6 +82,7 @@ const RightPane = () => {
           name="savepassword"
           value="yes"
         />
+
         <label className="checkbox-label" for="savepassword">
           Remember me?
         </label>
@@ -89,8 +93,18 @@ const RightPane = () => {
     </div>
   );
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
+
+    if (!email || !password) {
+      notification.open({
+        message: "Kindly Fill All Fields",
+        description: "All fields in login form are required",
+        icon: <CloseCircleOutlined style={{ color: "tomato" }} />,
+      });
+    }
+    // let ret = await login({ variables: { email, password } });
+    // console.log(ret);
   }
 };
 
