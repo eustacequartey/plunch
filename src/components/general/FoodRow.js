@@ -105,10 +105,8 @@ export default Main;
 
 const Sheet = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-start;
-  padding: 2rem 0;
-  border: 1px solid black;
-
 `;
 
 const Card = styled.div`
@@ -116,8 +114,8 @@ const Card = styled.div`
   margin: 0 0 1rem 0;
   background: #edf2f7;
   border-radius: 1rem;
-  width: 20rem;
-  height: 22rem;
+  width: 12rem;
+  height: 10rem;
   word-wrap: break-word;
   margin: 0 0.5rem;
 
@@ -129,7 +127,7 @@ const Card = styled.div`
 
   .image {
     width: 100%;
-    height: 16rem;
+    height: 8rem;
     display: block;
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
