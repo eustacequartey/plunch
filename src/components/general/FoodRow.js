@@ -1,8 +1,9 @@
 import React from "react";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
-import { Spin, Skeleton } from "antd";
+import { Button, Skeleton } from "antd";
 import styled from "styled-components";
+import { PlusOutlined } from "@ant-design/icons";
 
 const GET_MAIN_DISHES = gql`
   {
@@ -16,7 +17,7 @@ const GET_MAIN_DISHES = gql`
 
 function Main({}) {
   const { loading, error, data } = useQuery(GET_MAIN_DISHES);
-  const [stateData, setData] = React.useState([]);
+
   if (loading)
     return (
       <>
@@ -96,7 +97,10 @@ function FoodCard({ name, type }) {
           "https://images.pexels.com/photos/616404/pexels-photo-616404.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
         }
       />
-      <h4 className="name">{name}</h4>
+      <div className="bottom1">
+        <h4 className="name">{name.toUpperCase()}</h4>
+        <Button type="default" icon={<PlusOutlined />} size={"medium"}></Button>
+      </div>
     </Card>
   );
 }
@@ -107,30 +111,39 @@ const Sheet = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
+  padding: 0.3rem 0;
 `;
 
 const Card = styled.div`
   border: 1px solid #cbd5e0;
   margin: 0 0 1rem 0;
   background: #edf2f7;
-  border-radius: 1rem;
+  border-radius: 0.5rem 0.5rem 0 0;
   width: 12rem;
-  height: 10rem;
   word-wrap: break-word;
-  margin: 0 0.5rem;
+  margin: 0.5rem 0.5rem;
 
   .name {
-    font-size: 1rem;
     color: #4a5568;
-    text-align: center;
   }
 
   .image {
     width: 100%;
     height: 8rem;
     display: block;
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
     object-fit: cover;
+  }
+
+  .bottom1 {
+    padding: 0.3rem 0.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    word-wrap: break-word;
+
+    .add {
+      padding: 0rem 0.4rem;
+    }
   }
 `;
