@@ -127,6 +127,10 @@ const Sidebar = styled.div`
   background-color: #f5f5f5;
   max-height: 100vh;
 
+  @media only screen and (max-width: 1151px) {
+    display: none;
+  }
+
   .top {
     background-color: #262444;
     color: #fff;

@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 
 //Apollo Client
 import { ApolloClient } from "apollo-client";
@@ -31,7 +31,16 @@ const client = new ApolloClient({
 const Provider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [profile, mutateProfile] = useState({});
-  const [currentOrder, setCurrentOrder] = useState({});
+  const [currentOrder, setCurrentOrder] = useState({
+    mainDish: "",
+    sideDish: "",
+    protein: "",
+    createdFor: "ckaqwhini4y0t09418y283fn0",
+  });
+
+  useEffect(() => {
+    console.log(currentOrder);
+  }, [currentOrder]);
 
   return (
     <>
@@ -42,6 +51,9 @@ const Provider = (props) => {
           profile,
           setProfile,
           currentOrder,
+          setMainDish,
+          setSideDish,
+          setProtein,
         }}>
         <ApolloProvider client={client}>{props.children}</ApolloProvider>
       </AppContext.Provider>
@@ -54,6 +66,18 @@ const Provider = (props) => {
 
   function setProfile(profile) {
     return mutateProfile(profile);
+  }
+
+  function setMainDish(id) {
+    return setCurrentOrder({ ...currentOrder, mainDish: id });
+  }
+
+  function setSideDish(id) {
+    return setCurrentOrder({ ...currentOrder, sideDish: id });
+  }
+
+  function setProtein(id) {
+    return setCurrentOrder({ ...currentOrder, protein: id });
   }
 };
 

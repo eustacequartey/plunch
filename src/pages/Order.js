@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { MyOrder } from "../components/order";
+import { ConfirmButton } from "../components/general/";
 import { FoodRow, SideRow, ProteinRow } from "../components/general";
 import { Button, Radio } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
@@ -10,23 +10,28 @@ const Order = () => {
 
   return (
     <OrderLayer>
-      <Selector>
-        <Radio.Group value={selection} onChange={handleselectionChange}>
-          <Radio.Button selection={"large"} value="sides">
-            Sides
-          </Radio.Button>
-          <Radio.Button selection={"large"} value="mains">
-            Mains
-          </Radio.Button>
-          <Radio.Button selection={"large"} value="proteins">
-            Proteins
-          </Radio.Button>
-        </Radio.Group>
-      </Selector>
+      <div className="header">
+        <Selector>
+          <Radio.Group value={selection} onChange={handleselectionChange}>
+            <Radio.Button selection={"large"} value="sides">
+              Sides
+            </Radio.Button>
+            <Radio.Button selection={"large"} value="mains">
+              Mains
+            </Radio.Button>
+            <Radio.Button selection={"large"} value="proteins">
+              Proteins
+            </Radio.Button>
+          </Radio.Group>
+        </Selector>
+        <ConfirmButton />
+      </div>
 
-      {selection === "mains" && <FoodRow />}
-      {selection === "sides" && <SideRow />}
-      {selection === "proteins" && <ProteinRow />}
+      <div>
+        {selection === "mains" && <FoodRow />}
+        {selection === "sides" && <SideRow />}
+        {selection === "proteins" && <ProteinRow />}
+      </div>
     </OrderLayer>
   );
 
@@ -43,9 +48,13 @@ const OrderLayer = styled.div`
   border: 1px dotted #e2e8f0;
   flex-direction: column;
 
-  .mainsheader {
-    font-size: 1.2rem;
-    color: #4a5568;
+  .header {
+    // border: 1px solid black;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 1rem;
+    margin: 0 0 2rem 0;
   }
 `;
 
