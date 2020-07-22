@@ -31,11 +31,18 @@ const client = new ApolloClient({
 const Provider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [profile, mutateProfile] = useState({});
+  const [currentOrder, setCurrentOrder] = useState({});
 
   return (
     <>
       <AppContext.Provider
-        value={{ isLoggedIn, toggleLoggedIn, profile, setProfile }}>
+        value={{
+          isLoggedIn,
+          toggleLoggedIn,
+          profile,
+          setProfile,
+          currentOrder,
+        }}>
         <ApolloProvider client={client}>{props.children}</ApolloProvider>
       </AppContext.Provider>
     </>

@@ -3,7 +3,6 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { Button, Skeleton } from "antd";
 import styled from "styled-components";
-import { PlusOutlined } from "@ant-design/icons";
 
 const GET_MAIN_DISHES = gql`
   {
@@ -64,7 +63,7 @@ function Display({ data }) {
 function Row({ title, data }) {
   return (
     <>
-      <p>{`${title} DISHES`}</p>
+      <SectionHeader>{`${title} DISHES`}</SectionHeader>
       <Sheet>
         {data.map((maindish) => (
           <FoodCard
@@ -81,9 +80,9 @@ function Row({ title, data }) {
 function FoodCard({ name, type }) {
   const typesrcs = {
     SOUP:
-      "https://images.unsplash.com/photo-1574653853027-5382a3d23a15?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1052&q=80",
+      "https://images.unsplash.com/photo-1541095441899-5d96a6da10b8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80",
     STEW:
-      "https://nitrocdn.com/kAYhDANARZBYBuChUfNCjMuCDSNidQew/assets/static/optimized/wp-content/uploads/2013/09/dea8e6f20be6ab50c0e95c8e413282ef.IMG_0446.jpg",
+      "https://images.unsplash.com/photo-1560100927-c32f29063ade?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=80",
     HOTSAUCE:
       "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2011/5/9/0/FNM_060111-Insert-008-d_s4x3.jpg.rend.hgtvcom.616.462.suffix/1371597500184.jpeg",
   };
@@ -99,7 +98,7 @@ function FoodCard({ name, type }) {
       />
       <div className="bottom1">
         <h4 className="name">{name.toUpperCase()}</h4>
-        <Button type="default" icon={<PlusOutlined />} size={"medium"}></Button>
+        {/* <Button type="default" icon={<PlusOutlined />} size={"medium"}></Button> */}
       </div>
     </Card>
   );
@@ -111,20 +110,24 @@ const Sheet = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding: 0.3rem 0;
+  // padding: 0.3rem 0 1rem 0;
+  margin: 0 0 2rem 0;
 `;
 
 const Card = styled.div`
   border: 1px solid #cbd5e0;
-  margin: 0 0 1rem 0;
+  // margin: 0 0 0 0;
   background: #edf2f7;
-  border-radius: 0.5rem 0.5rem 0 0;
+  border-radius: 0.5rem 0.5rem;
   width: 12rem;
   word-wrap: break-word;
   margin: 0.5rem 0.5rem;
 
   .name {
     color: #4a5568;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    font-weight: 600;
   }
 
   .image {
@@ -133,12 +136,17 @@ const Card = styled.div`
     display: block;
     border-radius: 0.5rem 0.5rem 0 0;
     object-fit: cover;
+    opacity: 0.8;
+  }
+
+  .image:hover {
+    opacity: 1;
   }
 
   .bottom1 {
-    padding: 0.3rem 0.3rem;
+    padding: 0 0.3rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     word-wrap: break-word;
 
@@ -146,4 +154,9 @@ const Card = styled.div`
       padding: 0rem 0.4rem;
     }
   }
+`;
+
+const SectionHeader = styled.p`
+  font-size: 1.5rem;
+  font-weight: 1000;
 `;

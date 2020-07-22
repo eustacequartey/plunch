@@ -1,7 +1,7 @@
 import React from "react";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
-import { Spin, Skeleton } from "antd";
+import { Skeleton } from "antd";
 import styled from "styled-components";
 
 const GET_SIDE_DISHES = gql`
@@ -16,7 +16,6 @@ const GET_SIDE_DISHES = gql`
 
 function Side({}) {
   const { loading, error, data } = useQuery(GET_SIDE_DISHES);
-  const [stateData, setData] = React.useState([]);
   if (loading)
     return (
       <>
@@ -63,7 +62,7 @@ function Display({ data }) {
 function Row({ title, data }) {
   return (
     <>
-      <p>{`${title} DISHES`}</p>
+      <SectionHeader>{`${title} DISHES`}</SectionHeader>
       <Sheet>
         {data.map((sidedish) => (
           <FoodCard
@@ -107,30 +106,53 @@ const Sheet = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
+  // padding: 0.3rem 0 1rem 0;
+  margin: 0 0 2rem 0;
 `;
 
 const Card = styled.div`
   border: 1px solid #cbd5e0;
-  margin: 0 0 1rem 0;
+  // margin: 0 0 0 0;
   background: #edf2f7;
-  border-radius: 1rem;
+  border-radius: 0.5rem 0.5rem;
   width: 12rem;
-  height: 10rem;
   word-wrap: break-word;
-  margin: 0 0.5rem;
+  margin: 0.5rem 0.5rem;
 
   .name {
-    font-size: 1rem;
     color: #4a5568;
-    text-align: center;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    font-weight: 600;
   }
 
   .image {
     width: 100%;
     height: 8rem;
     display: block;
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
     object-fit: cover;
+    opacity: 0.8;
   }
+
+  .image:hover {
+    opacity: 1;
+  }
+
+  .bottom1 {
+    padding: 0 0.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    word-wrap: break-word;
+
+    .add {
+      padding: 0rem 0.4rem;
+    }
+  }
+`;
+
+const SectionHeader = styled.p`
+  font-size: 1.5rem;
+  font-weight: 1000;
 `;
