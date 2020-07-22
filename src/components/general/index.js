@@ -6,3 +6,4 @@ export { default as FoodRow } from "./FoodRow";
 export { default as SideRow } from "./SideRow";
 export { default as ProteinRow } from "./ProteinRow";
 export { default as AddButton } from "./AddButton";
+export { default as User } from "./User";
