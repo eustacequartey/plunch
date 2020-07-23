@@ -11,20 +11,25 @@ const Order = () => {
   return (
     <OrderLayer>
       <div className="header">
-        <Selector>
-          <Radio.Group value={selection} onChange={handleselectionChange}>
-            <Radio.Button selection={"large"} value="sides">
-              Sides
-            </Radio.Button>
-            <Radio.Button selection={"large"} value="mains">
-              Mains
-            </Radio.Button>
-            <Radio.Button selection={"large"} value="proteins">
-              Proteins
-            </Radio.Button>
-          </Radio.Group>
-        </Selector>
-        <ConfirmButton />
+        <div>
+          <h4>Order</h4>
+        </div>
+        <div className="rightHeader">
+          <Selector>
+            <Radio.Group value={selection} onChange={handleselectionChange}>
+              <Radio.Button selection={"large"} value="sides">
+                Sides
+              </Radio.Button>
+              <Radio.Button selection={"large"} value="mains">
+                Mains
+              </Radio.Button>
+              <Radio.Button selection={"large"} value="proteins">
+                Proteins
+              </Radio.Button>
+            </Radio.Group>
+          </Selector>
+          <ConfirmButton />
+        </div>
       </div>
 
       <div>
@@ -49,12 +54,25 @@ const OrderLayer = styled.div`
   flex-direction: column;
 
   .header {
-    // border: 1px solid black;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     padding: 0 1rem;
     margin: 0 0 2rem 0;
+    border: 1px solid black;
+
+    .rightHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+    }
+
+    h4 {
+      font-size: 1.5rem;
+      font-weight: 1000;
+      margin: 0;
+      padding: 0 0 0 0;
+    }
   }
 `;
 

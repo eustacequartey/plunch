@@ -15,18 +15,16 @@ export default ConfirmButton;
 
 const ConfirmButtonSheet = styled.div`
   .text {
-    margin: 0;
-    padding: 0;
+    font-size: 1.5rem;
     font-weight: 1000;
-    align-self: center;
+    margin: 0;
+    padding: 0 0 0 0;
   }
 
   button{
-   display:inline-block;
    padding:4px 10px;
-   border:0.1em solid black;
-   margin:0 0 0 1rem;
-   border-radius:1rem;
+   border:1px solid #1561ad;
+   margin:0 .5rem;
    box-sizing: border-box;
    text-decoration:none;
    font-family:'Roboto',sans-serif;
@@ -37,8 +35,13 @@ const ConfirmButtonSheet = styled.div`
     cursor: pointer;
   }
   button:hover{
-   color:#ffffff;
-   background-color:#000000;
+    color: #fff;
+    background-color: #a0d2eb;
+    border: 0.1em solid #a0d2eb;
+
+    .text{
+      color: #fff;
+    }
   }
   @media all and (max-width:30em){
    button{

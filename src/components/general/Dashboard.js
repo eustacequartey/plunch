@@ -52,7 +52,10 @@ const Dashboard = (props) => {
                 <StyledImage src={avatar} />
               </div>
               <div>
-                <p style={{ padding: "0 .5rem" }}>Hello, User</p>
+                <p style={{ padding: "0 .5rem", margin: 0 }}>
+                  Hello,{" "}
+                  {JSON.parse(localStorage.getItem("USER")).firstName || "USER"}
+                </p>
               </div>
             </div>
 

@@ -1,25 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
+import { CPModal } from "../components/general";
 import styled from "styled-components";
 import { AppContext } from "../context";
-import Lottie from "react-lottie";
-import animationData from "../assets/lottie/27474-food-delivery.json";
 
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
-
-const Home = () => {
+const Profile = () => {
   const { toggleLoggedIn } = useContext(AppContext);
-  const [isStopped] = useState(false);
-  const [isPaused] = useState(false);
 
   return (
-    <HomePageSheet>
+    <ProfilePageSheet>
       <div className="header">
         <div>
           <h4>Home</h4>
@@ -31,16 +19,7 @@ const Home = () => {
           </button>
         </div>
       </div>
-
-      <div style={{ border: "1px solid black" }}>
-        <Lottie
-          options={defaultOptions}
-          height={700}
-          isStopped={isStopped}
-          isPaused={isPaused}
-        />
-      </div>
-    </HomePageSheet>
+    </ProfilePageSheet>
   );
 
   function onLogout() {
@@ -50,9 +29,9 @@ const Home = () => {
   }
 };
 
-export default Home;
+export default Profile;
 
-const HomePageSheet = styled.div`
+const ProfilePageSheet = styled.div`
   display: flex;
   flex: 1;
   border: 1px dotted #e2e8f0;
@@ -74,7 +53,6 @@ const HomePageSheet = styled.div`
     align-items: center;
     padding: 0 1rem;
     margin: 0 0 2rem 0;
-    border: 1px solid;
   }
 
   .logoutButton {
