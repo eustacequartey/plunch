@@ -14,7 +14,7 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("AUTH_TOKEN");
   return {
     headers: {
       ...headers,
@@ -29,18 +29,29 @@ const client = new ApolloClient({
 });
 
 const Provider = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [profile, mutateProfile] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [profile, mutateProfile] = useState(
+    JSON.parse(localStorage.getItem("USER"))
+  );
   const [currentOrder, setCurrentOrder] = useState({
     mainDish: "",
     sideDish: "",
     protein: "",
-    createdFor: "ckaqwhini4y0t09418y283fn0",
+    createdFor: localStorage.getItem("USER")
+      ? JSON.parse(localStorage.getItem("USER")).id
+      : "",
   });
 
   useEffect(() => {
     console.log(currentOrder);
-  }, [currentOrder]);
+    console.log(profile);
+    setCurrentOrder({ ...currentOrder, createdFor: profile && profile.id });
+    if (localStorage.getItem("AUTH_TOKEN")) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [profile]);
 
   return (
     <>

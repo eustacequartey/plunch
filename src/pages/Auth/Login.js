@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import logo from "../../assets/images/plogosmall.png";
 import { Spinner } from "evergreen-ui";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
-import { Mutation } from "react-apollo";
+import { AppContext } from "../../context/";
+import { notification, Space } from "antd";
 
 const LOGIN = gql`
   mutation LOGIN($email: String!, $password: String!) {
@@ -19,36 +20,14 @@ const LOGIN = gql`
   }
 `;
 
-function _saveUserData(token) {
+function _saveUserData(token, user) {
   localStorage.setItem("AUTH_TOKEN", token);
+  localStorage.setItem("USER", JSON.stringify(user));
 }
 
 async function _confirm(data) {
   const { token } = await data.login.token;
   _saveUserData(token);
-}
-
-function LoginButton({ email, password, resetInput }) {
-  const [login] = useMutation(LOGIN, { onCompleted: resetInput });
-
-  return (
-    <div>
-      <Mutation
-        mutation={login}
-        variables={{ email, password }}
-        onCompleted={(data) => _confirm(data)}>
-        {(mutation) => (
-          <button
-            aria-hidden="true"
-            className="submit"
-            type="submit"
-            onClick={mutation}>
-            {"SUBMIT"}
-          </button>
-        )}
-      </Mutation>
-    </div>
-  );
 }
 
 const Login = () => {
@@ -79,10 +58,16 @@ const LeftPane = () => {
 const RightPane = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [login, { loading }] = useMutation(LOGIN);
+  const { setProfile, toggleLoggedIn } = useContext(AppContext);
 
   return (
     <div className="right">
-      <form className="form">
+      <form
+        className="form"
+        onSubmit={(e) => {
+          loginFunction(e);
+        }}>
         <div className="heading">Login Portal</div>
         <div>
           <p className="label">EMAIL</p>
@@ -118,10 +103,31 @@ const RightPane = () => {
         <label className="checkbox-label" for="savepassword">
           Remember me?
         </label>
-        <LoginButton email={email} password={password} resetInput={reset} />
+        <button aria-hidden="true" className="submit" type="submit">
+          {loading ? "loading" : "SUBMIT"}
+        </button>
       </form>
     </div>
   );
+
+  function loginFunction(e) {
+    e.preventDefault();
+
+    login({ variables: { email, password } })
+      .then(({ data }) => {
+        console.log(data);
+        _saveUserData(data.login.token, data.login.user);
+        setProfile(data.login.user);
+        toggleLoggedIn();
+      })
+      .catch((error) => {
+        notification["error"]({
+          message: "Error",
+          description: error.message,
+        });
+      });
+  }
+
   function reset() {
     setEmail("");
     setPassword("");
