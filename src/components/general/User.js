@@ -1,8 +1,8 @@
 import React from "react";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
-import { Skeleton } from "antd";
-
+import { Skeleton, Table, Switch } from "antd";
+const { Column } = Table;
 const GET_USERS = gql`
   {
     users {
@@ -31,12 +31,42 @@ function User({}) {
 
 function Display({ data }) {
   const userData = data.users;
+  //   userData.forEach((user) => {
+  //     if (user.activated == true) {
+  //       user.activated = "Activated";
+  //     } else {
+  //       user.activated = "Not Activated";
+  //     }
+  //   });
+
+  console.log(userData);
+
+  const columns = [
+    {
+      title: "First Name",
+      dataIndex: "firstName",
+      key: "firstName",
+    },
+    {
+      title: "Last Name",
+      dataIndex: "lastName",
+      key: "lastName",
+    },
+    // {
+    //   title: "Status",
+    //   dataIndex: "activated",
+    //   key: "activated",
+    // },
+    {
+      title: "Activate",
+      key: "activate",
+      render: (text, record) => <Switch />,
+    },
+  ];
 
   return (
     <div>
-      {userData.map((user) => (
-        <p>{user.firstName}</p>
-      ))}
+      <Table dataSource={userData} columns={columns} />
     </div>
   );
 }
