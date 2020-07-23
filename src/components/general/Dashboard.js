@@ -33,7 +33,9 @@ const Dashboard = (props) => {
         </div>
         <div className="group">
           <StyledImage src={heart} />
-          <StyledImage src={settings} />
+          <NavLink to="/profile" exact={true}>
+            <StyledImage src={settings} />
+          </NavLink>
           <NavLink to="/" exact={true}>
             <StyledImage src={user} />
           </NavLink>
@@ -154,6 +156,12 @@ const Sidebar = styled.div`
     flex-direction: column;
     flex-grow: 1;
     padding: 2rem 2rem;
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 1000;
+      margin: 0;
+    }
 
     .title {
       font-size: 3rem;

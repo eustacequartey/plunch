@@ -88,7 +88,7 @@ function FoodCard({ name, type, id }) {
     FISH:
       "https://images.unsplash.com/photo-1510130387422-82bed34b37e9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
   };
-  const { setProtein } = useContext(AppContext);
+  const { setProtein, currentOrder } = useContext(AppContext);
 
   return (
     <Card>
@@ -101,6 +101,9 @@ function FoodCard({ name, type, id }) {
       />
       <div className="bottom1">
         <h4
+          style={{
+            textDecoration: currentOrder.protein === id ? "underline" : "none",
+          }}
           onClick={() => {
             setProtein(id);
           }}

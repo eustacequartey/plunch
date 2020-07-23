@@ -15,6 +15,8 @@ const LOGIN = gql`
         email
         firstName
         lastName
+        activated
+        hasChangedPassword
       }
     }
   }
@@ -59,7 +61,7 @@ const RightPane = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [login, { loading }] = useMutation(LOGIN);
-  const { setProfile, toggleLoggedIn } = useContext(AppContext);
+  const { toggleLoggedIn } = useContext(AppContext);
 
   return (
     <div className="right">
@@ -100,9 +102,7 @@ const RightPane = () => {
           value="yes"
         />
 
-        <label className="checkbox-label" for="savepassword">
-          Remember me?
-        </label>
+        <label className="checkbox-label">Remember me?</label>
         <button aria-hidden="true" className="submit" type="submit">
           {loading ? "loading" : "SUBMIT"}
         </button>
@@ -117,7 +117,6 @@ const RightPane = () => {
       .then(({ data }) => {
         console.log(data);
         _saveUserData(data.login.token, data.login.user);
-        setProfile(data.login.user);
         toggleLoggedIn();
       })
       .catch((error) => {

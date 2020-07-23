@@ -30,28 +30,23 @@ const client = new ApolloClient({
 
 const Provider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [profile, mutateProfile] = useState(
-    JSON.parse(localStorage.getItem("USER"))
-  );
   const [currentOrder, setCurrentOrder] = useState({
     mainDish: "",
     sideDish: "",
     protein: "",
-    createdFor: localStorage.getItem("USER")
+    createdBy: localStorage.getItem("USER")
       ? JSON.parse(localStorage.getItem("USER")).id
       : "",
   });
 
   useEffect(() => {
     console.log(currentOrder);
-    console.log(profile);
-    setCurrentOrder({ ...currentOrder, createdFor: profile && profile.id });
     if (localStorage.getItem("AUTH_TOKEN")) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-  }, [profile]);
+  }, []);
 
   return (
     <>
@@ -59,8 +54,7 @@ const Provider = (props) => {
         value={{
           isLoggedIn,
           toggleLoggedIn,
-          profile,
-          setProfile,
+          onLogout,
           currentOrder,
           setMainDish,
           setSideDish,
@@ -75,8 +69,11 @@ const Provider = (props) => {
     return setIsLoggedIn(!isLoggedIn);
   }
 
-  function setProfile(profile) {
-    return mutateProfile(profile);
+  function onLogout() {
+    client.resetStore();
+    localStorage.removeItem("AUTH_TOKEN");
+    localStorage.removeItem("USER");
+    toggleLoggedIn();
   }
 
   function setMainDish(id) {

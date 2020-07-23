@@ -87,7 +87,7 @@ function FoodCard({ name, type, id }) {
     HOTSAUCE:
       "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2011/5/9/0/FNM_060111-Insert-008-d_s4x3.jpg.rend.hgtvcom.616.462.suffix/1371597500184.jpeg",
   };
-  const { setSideDish } = useContext(AppContext);
+  const { setSideDish, currentOrder } = useContext(AppContext);
 
   return (
     <Card>
@@ -100,6 +100,9 @@ function FoodCard({ name, type, id }) {
       />
       <div className="bottom1">
         <h4
+          style={{
+            textDecoration: currentOrder.sideDish === id ? "underline" : "none",
+          }}
           onClick={() => {
             setSideDish(id);
           }}

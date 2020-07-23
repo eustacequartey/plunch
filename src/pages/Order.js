@@ -2,12 +2,27 @@ import React from "react";
 import styled from "styled-components";
 import { ConfirmButton } from "../components/general/";
 import { FoodRow, SideRow, ProteinRow } from "../components/general";
-import { Button, Radio } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
+import { Select } from "antd";
+import Lottie from "react-lottie";
+import animationData from "../assets/lottie/fry.json";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
+
+const { Option } = Select;
 
 const Order = () => {
   const [selection, setselection] = React.useState("mains");
 
+  const onGenderChange = (value) => {
+    setselection(value);
+  };
   return (
     <OrderLayer>
       <div className="header">
@@ -15,24 +30,22 @@ const Order = () => {
           <h4>Order</h4>
         </div>
         <div className="rightHeader">
-          <Selector>
-            <Radio.Group value={selection} onChange={handleselectionChange}>
-              <Radio.Button selection={"large"} value="sides">
-                Sides
-              </Radio.Button>
-              <Radio.Button selection={"large"} value="mains">
-                Mains
-              </Radio.Button>
-              <Radio.Button selection={"large"} value="proteins">
-                Proteins
-              </Radio.Button>
-            </Radio.Group>
-          </Selector>
+          <Select placeholder={selection} onChange={onGenderChange} allowClear>
+            <Option value="mains">Main Dishes</Option>
+            <Option value="sides">Side Dishes</Option>
+            <Option value="proteins">Protein Dishes</Option>
+          </Select>
           <ConfirmButton />
         </div>
       </div>
 
       <div>
+        {!selection && (
+          <div>
+            <Lottie options={defaultOptions} height={500} width={500} />
+            <h4 style={{ textAlign: "center" }}>Select Option</h4>
+          </div>
+        )}
         {selection === "mains" && <FoodRow />}
         {selection === "sides" && <SideRow />}
         {selection === "proteins" && <ProteinRow />}
@@ -43,6 +56,8 @@ const Order = () => {
   function handleselectionChange(e) {
     setselection(e.target.value);
   }
+
+  function createOrderFunction() {}
 };
 
 export default Order;
@@ -52,6 +67,13 @@ const OrderLayer = styled.div`
   flex: 1;
   border: 1px dotted #e2e8f0;
   flex-direction: column;
+  h4 {
+    font-size: 1.5rem;
+    font-weight: 1000;
+    margin: 0;
+    padding: 0 0 0 0;
+    color: #718096;
+  }
 
   .header {
     display: flex;
@@ -59,7 +81,6 @@ const OrderLayer = styled.div`
     align-items: center;
     padding: 0 1rem;
     margin: 0 0 2rem 0;
-    border: 1px solid black;
 
     .rightHeader {
       display: flex;

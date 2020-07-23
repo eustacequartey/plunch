@@ -14,9 +14,7 @@ const defaultOptions = {
 };
 
 const Home = () => {
-  const { toggleLoggedIn } = useContext(AppContext);
-  const [isStopped] = useState(false);
-  const [isPaused] = useState(false);
+  const { onLogout } = useContext(AppContext);
 
   return (
     <HomePageSheet>
@@ -32,22 +30,11 @@ const Home = () => {
         </div>
       </div>
 
-      <div style={{ border: "1px solid black" }}>
-        <Lottie
-          options={defaultOptions}
-          height={700}
-          isStopped={isStopped}
-          isPaused={isPaused}
-        />
+      <div>
+        <Lottie options={defaultOptions} height={700} />
       </div>
     </HomePageSheet>
   );
-
-  function onLogout() {
-    localStorage.removeItem("AUTH_TOKEN");
-    localStorage.removeItem("USER");
-    toggleLoggedIn();
-  }
 };
 
 export default Home;
@@ -66,6 +53,7 @@ const HomePageSheet = styled.div`
     font-weight: 1000;
     margin: 0;
     padding: 0 0 0 0;
+    color: #718096;
   }
 
   .header {
@@ -74,14 +62,14 @@ const HomePageSheet = styled.div`
     align-items: center;
     padding: 0 1rem;
     margin: 0 0 2rem 0;
-    border: 1px solid;
+    // border: 1px solid;
   }
 
   .logoutButton {
     background-color: #fff;
     display: inline-block;
      padding: 4px 10px;
-     border: 1px solid #1561ad;
+     border: 1px solid #a0d2eb;
      margin: 0 0 0 1rem;
      box-sizing: border-box;
      text-decoration: none;
