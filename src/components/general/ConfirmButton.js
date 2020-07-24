@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { AppContext } from "../../context/";
-
+import moment from "moment";
 import { useMutation } from "@apollo/react-hooks";
 import CREATE_ORDER from "../../graphql/mutations/order";
 import { message, notification } from "antd";
@@ -20,9 +20,16 @@ const ConfirmButton = () => {
 
   function onConfirm() {
     if (currentOrder.mainDish !== "" && currentOrder.sideDish !== "") {
-      createOrder({ variables: currentOrder })
+      createOrder({
+        variables: {
+          createdFor: moment().format(),
+          main: currentOrder.mainDish,
+          side: currentOrder.sideDish,
+          protein: currentOrder.protein,
+        },
+      })
         .then(({ data }) => {
-          console.log(data);
+          message.success("success");
         })
         .catch((error) => {
           notification["error"]({
@@ -36,19 +43,6 @@ const ConfirmButton = () => {
   }
 };
 
-// login({ variables: { email, password } })
-// .then(({ data }) => {
-//   console.log(data);
-//   _saveUserData(data.login.token, data.login.user);
-//   setProfile(data.login.user);
-//   toggleLoggedIn();
-// })
-// .catch((error) => {
-//   notification["error"]({
-//     message: "Error",
-//     description: error.message,
-//   });
-// });
 export default ConfirmButton;
 
 const ConfirmButtonSheet = styled.div`

@@ -14,6 +14,7 @@ import users from "../../assets/images/users.png";
 import { NavLink } from "react-router-dom";
 import OrderFlow from "./OrderFlow";
 import Summary from "./Summary";
+import OrderFlowContainer from "./OrderFlowContainer";
 
 const Dashboard = (props) => {
   return (
@@ -54,8 +55,7 @@ const Dashboard = (props) => {
               style={{
                 display: "flex",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <div>
                 <StyledImage src={avatar} />
               </div>
@@ -78,10 +78,7 @@ const Dashboard = (props) => {
               Orders {<span style={{ color: "#979797" }}>Flow</span>}
             </h3>
           </div>
-          <div>
-            <OrderFlow />
-            <OrderFlow delivered={true} />
-          </div>
+          <OrderFlowContainer />
           <div style={{ marginTop: "auto" }}>
             <Summary />
           </div>
@@ -135,7 +132,7 @@ const Sidebar = styled.div`
   flex-basis: 23%;
   display: flex;
   flex-direction: column;
-  background-color: #f5f5f5;
+  background-color: #fff;
   max-height: 100vh;
 
   @media only screen and (max-width: 1151px) {

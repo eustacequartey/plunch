@@ -90,7 +90,16 @@ function FoodCard({ name, type, id }) {
   const { setSideDish, currentOrder } = useContext(AppContext);
 
   return (
-    <Card>
+    <Card
+      onClick={() => {
+        setSideDish(id);
+      }}
+      style={{
+        border:
+          currentOrder.sideDish === id
+            ? "2px dotted #2C7A7B"
+            : "1px solid #cbd5e0",
+      }}>
       <img
         className={"image"}
         src={
@@ -99,16 +108,7 @@ function FoodCard({ name, type, id }) {
         }
       />
       <div className="bottom1">
-        <h4
-          style={{
-            textDecoration: currentOrder.sideDish === id ? "underline" : "none",
-          }}
-          onClick={() => {
-            setSideDish(id);
-          }}
-          className="name">
-          {name.toUpperCase()}
-        </h4>
+        <h4 className="name">{name.toUpperCase()}</h4>
       </div>
     </Card>
   );

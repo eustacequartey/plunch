@@ -91,7 +91,16 @@ function FoodCard({ name, type, id }) {
   const { setProtein, currentOrder } = useContext(AppContext);
 
   return (
-    <Card>
+    <Card
+      onClick={() => {
+        setProtein(id);
+      }}
+      style={{
+        border:
+          currentOrder.protein === id
+            ? "2px dotted #2C7A7B"
+            : "1px solid #cbd5e0",
+      }}>
       <img
         className={"image"}
         src={
@@ -100,16 +109,7 @@ function FoodCard({ name, type, id }) {
         }
       />
       <div className="bottom1">
-        <h4
-          style={{
-            textDecoration: currentOrder.protein === id ? "underline" : "none",
-          }}
-          onClick={() => {
-            setProtein(id);
-          }}
-          className="name">
-          {name.toUpperCase()}
-        </h4>
+        <h4 className="name">{name.toUpperCase()}</h4>
       </div>
     </Card>
   );

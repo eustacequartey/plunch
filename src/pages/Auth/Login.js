@@ -115,7 +115,6 @@ const RightPane = () => {
 
     login({ variables: { email, password } })
       .then(({ data }) => {
-        console.log(data);
         _saveUserData(data.login.token, data.login.user);
         toggleLoggedIn();
       })

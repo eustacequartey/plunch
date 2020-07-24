@@ -1,38 +1,30 @@
 import gql from "graphql-tag";
 
-const CREATE_ORDER = gql`
-  mutation LOGIN(
-    $createdBy: String!
-    $main: String!
-    $side: String!
-    $protein: String!
-  ) {
-    login(
+export default gql`
+  mutation($createdFor: String!, $main: ID!, $side: ID!, $protein: ID!) {
+    createOrder(
       data: {
-        createdBy: $createdBy
+        createdFor: $createdFor
         main: $main
         side: $side
         protein: $protein
       }
     ) {
-      token
-      user {
-        id
-        createdAt
-        createdFor
-        createdBy
-        main {
-          name
-        }
-        side {
-          name
-        }
-        protein {
-          name
-        }
+      id
+      createdAt
+      createdFor
+      createdBy {
+        email
+      }
+      main {
+        name
+      }
+      side {
+        name
+      }
+      protein {
+        name
       }
     }
   }
 `;
-
-export default CREATE_ORDER;
