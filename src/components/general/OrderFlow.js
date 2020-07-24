@@ -54,7 +54,7 @@ const StyledOrderFlow = styled.div`
   border-bottom: 0.1px solid #edf2f7;
   h4 {
     font-size: 15px;
-    font-weight: 900;
+    // font-weight: 900;
     margin: 0;
   }
 

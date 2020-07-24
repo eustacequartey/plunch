@@ -35,7 +35,7 @@ async function _confirm(data) {
 const Login = () => {
   return (
     <div className="login">
-      <LeftPane />
+      {/* <LeftPane /> */}
       <RightPane />
     </div>
   );
@@ -95,14 +95,6 @@ const RightPane = () => {
           />
         </div>
 
-        <input
-          type="checkbox"
-          id="savepassword"
-          name="savepassword"
-          value="yes"
-        />
-
-        <label className="checkbox-label">Remember me?</label>
         <button aria-hidden="true" className="submit" type="submit">
           {loading ? "loading" : "SUBMIT"}
         </button>
