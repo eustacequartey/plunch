@@ -55,7 +55,7 @@ const ConfirmButtonSheet = styled.div`
 
   button{
    padding:4px 10px;
-   border:1px solid #a0d2eb;
+   border:1px solid #718096;
    margin:0 .5rem;
    box-sizing: border-box;
    text-decoration:none;
@@ -67,8 +67,8 @@ const ConfirmButtonSheet = styled.div`
   }
   button:hover{
     color: #fff;
-    background-color: #a0d2eb;
-    border: 0.1em solid #a0d2eb;
+    background-color: #718096;
+    border: 0.1em solid #718096;
 
     .text{
       color: #fff;

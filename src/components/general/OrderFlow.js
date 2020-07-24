@@ -28,12 +28,14 @@ const OrderFlow = (props) => {
       </div>
       <div className="rightOrderFlow">
         <div className="topRightOrderFlow">
-          <h4>Plain Rice Kontomire stew and boiled egg</h4>
+          <h4>Yesterday</h4>
+          <h5>8:29am</h5>
         </div>
         <div className="bottomRightOrderFlow">
           <Tag color={props.delivered === true ? "success" : "orange"}>
             {props.delivered === true ? "delivered" : "pending"}
           </Tag>
+          <h6>{props.delivered === true ? "12:56pm" : "..."}</h6>
         </div>
       </div>
     </StyledOrderFlow>
@@ -51,7 +53,13 @@ const StyledOrderFlow = styled.div`
   margin: 0 0;
   border-bottom: 0.1px solid #edf2f7;
   h4 {
-    font-size: 13px;
+    font-size: 15px;
+    font-weight: 900;
+    margin: 0;
+  }
+
+  h5 {
+    // font-size: 13px;
     font-weight: 900;
     margin: 0;
   }
@@ -74,11 +82,17 @@ const StyledOrderFlow = styled.div`
     .topRightOrderFlow {
       // border: 1px solid black;
       padding: 0.3em 0 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .bottomRightOrderFlow {
       // border: 1px solid black;
       padding: 0 0 0.3em 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 `;

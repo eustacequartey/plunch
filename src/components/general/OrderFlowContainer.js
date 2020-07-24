@@ -5,9 +5,8 @@ import OrderFlow from "./OrderFlow";
 export default () => {
   return (
     <OrderFlowContainerSheet>
-      <OrderFlow delivered={true} />
-      <OrderFlow delivered={true} />
       <OrderFlow />
+      <OrderFlow delivered={true} />
       <OrderFlow delivered={true} />
     </OrderFlowContainerSheet>
   );
