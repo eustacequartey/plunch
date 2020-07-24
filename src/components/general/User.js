@@ -30,16 +30,12 @@ function User({}) {
 }
 
 function Display({ data }) {
-  //   const [userData, setUserData] = React.useState([]);
-  //   setUserData(data.users);
-  //   console.log(userData);
   const userData = data.users;
-  console.log(userData);
 
   return (
     <div>
-      {Object.keys(userData).map((user, index) => (
-        <div key={index}>{user}</div>
+      {userData.map((user) => (
+        <p>{user.firstName}</p>
       ))}
     </div>
   );
