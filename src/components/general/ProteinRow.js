@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { Spin, Skeleton } from "antd";
 import styled from "styled-components";
+import { AppContext } from "../../context/";
 
 const GET_PROTEIN_DISHES = gql`
   {
@@ -38,8 +39,8 @@ function Display({ data }) {
 
   return (
     <>
-      {Object.keys(FoodData).map((el) => (
-        <Row title={el} data={FoodData[el]} />
+      {Object.keys(FoodData).map((el, index) => (
+        <Row key={index} title={el} data={FoodData[el]} />
       ))}
     </>
   );
@@ -66,14 +67,19 @@ function Row({ title, data }) {
       <SectionHeader>{`${title} DISHES`}</SectionHeader>
       <Sheet>
         {data.map((protein) => (
-          <FoodCard key={protein.id} name={protein.name} type={protein.type} />
+          <FoodCard
+            key={protein.id}
+            name={protein.name}
+            type={protein.type}
+            id={protein.id}
+          />
         ))}
       </Sheet>
     </>
   );
 }
 
-function FoodCard({ name, type }) {
+function FoodCard({ name, type, id }) {
   const typesrcs = {
     MISCELLANEOUS:
       "https://images.pexels.com/photos/4040539/pexels-photo-4040539.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
@@ -82,6 +88,7 @@ function FoodCard({ name, type }) {
     FISH:
       "https://images.unsplash.com/photo-1510130387422-82bed34b37e9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
   };
+  const { setProtein, currentOrder } = useContext(AppContext);
 
   return (
     <Card>
@@ -92,7 +99,18 @@ function FoodCard({ name, type }) {
           "https://images.pexels.com/photos/616404/pexels-photo-616404.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
         }
       />
-      <h4 className="name">{name}</h4>
+      <div className="bottom1">
+        <h4
+          style={{
+            textDecoration: currentOrder.protein === id ? "underline" : "none",
+          }}
+          onClick={() => {
+            setProtein(id);
+          }}
+          className="name">
+          {name.toUpperCase()}
+        </h4>
+      </div>
     </Card>
   );
 }
@@ -116,11 +134,20 @@ const Card = styled.div`
   word-wrap: break-word;
   margin: 0.5rem 0.5rem;
 
+  :hover {
+    cursor: pointer;
+  }
+
   .name {
     color: #4a5568;
     font-size: 1rem;
     padding: 0.5rem 0;
     font-weight: 600;
+    margin: 0;
+  }
+
+  .name:hover {
+    text-decoration: underline;
   }
 
   .image {
@@ -152,4 +179,6 @@ const Card = styled.div`
 const SectionHeader = styled.p`
   font-size: 1.5rem;
   font-weight: 1000;
+  margin: 0;
+  padding-left: 10px;
 `;

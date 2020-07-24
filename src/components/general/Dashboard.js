@@ -38,7 +38,9 @@ const Dashboard = (props) => {
         </div>
         <div className="group">
           <StyledImage src={heart} />
-          <StyledImage src={settings} />
+          <NavLink to="/profile" exact={true}>
+            <StyledImage src={settings} />
+          </NavLink>
           <NavLink to="/" exact={true}>
             <StyledImage src={user} />
           </NavLink>
@@ -58,7 +60,10 @@ const Dashboard = (props) => {
                 <StyledImage src={avatar} />
               </div>
               <div>
-                <p style={{ padding: "0 .5rem" }}>Hello, User</p>
+                <p style={{ padding: "0 .5rem", margin: 0 }}>
+                  Hello,{" "}
+                  {JSON.parse(localStorage.getItem("USER")).firstName || "USER"}
+                </p>
               </div>
             </div>
 
@@ -133,6 +138,10 @@ const Sidebar = styled.div`
   background-color: #f5f5f5;
   max-height: 100vh;
 
+  @media only screen and (max-width: 1151px) {
+    display: none;
+  }
+
   .top {
     background-color: #262444;
     color: #fff;
@@ -153,6 +162,12 @@ const Sidebar = styled.div`
     flex-direction: column;
     flex-grow: 1;
     padding: 2rem 2rem;
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 1000;
+      margin: 0;
+    }
 
     .title {
       font-size: 3rem;

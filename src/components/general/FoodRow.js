@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
-import { Button, Skeleton } from "antd";
+import { Skeleton } from "antd";
 import styled from "styled-components";
+import { AppContext } from "../../context/";
 
 const GET_MAIN_DISHES = gql`
   {
@@ -38,8 +39,8 @@ function Display({ data }) {
 
   return (
     <>
-      {Object.keys(FoodData).map((el) => (
-        <Row title={el} data={FoodData[el]} />
+      {Object.keys(FoodData).map((el, index) => (
+        <Row key={index} title={el} data={FoodData[el]} />
       ))}
     </>
   );
@@ -70,6 +71,7 @@ function Row({ title, data }) {
             key={maindish.id}
             name={maindish.name}
             type={maindish.type}
+            id={maindish.id}
           />
         ))}
       </Sheet>
@@ -77,7 +79,7 @@ function Row({ title, data }) {
   );
 }
 
-function FoodCard({ name, type }) {
+function FoodCard({ name, type, id }) {
   const typesrcs = {
     SOUP:
       "https://images.unsplash.com/photo-1541095441899-5d96a6da10b8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80",
@@ -86,7 +88,7 @@ function FoodCard({ name, type }) {
     HOTSAUCE:
       "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2011/5/9/0/FNM_060111-Insert-008-d_s4x3.jpg.rend.hgtvcom.616.462.suffix/1371597500184.jpeg",
   };
-
+  const { setMainDish, currentOrder } = useContext(AppContext);
   return (
     <Card>
       <img
@@ -97,8 +99,16 @@ function FoodCard({ name, type }) {
         }
       />
       <div className="bottom1">
-        <h4 className="name">{name.toUpperCase()}</h4>
-        {/* <Button type="default" icon={<PlusOutlined />} size={"medium"}></Button> */}
+        <h4
+          style={{
+            textDecoration: currentOrder.mainDish === id ? "underline" : "none",
+          }}
+          onClick={() => {
+            setMainDish(id);
+          }}
+          className="name">
+          {name.toUpperCase()}
+        </h4>
       </div>
     </Card>
   );
@@ -123,11 +133,19 @@ const Card = styled.div`
   word-wrap: break-word;
   margin: 0.5rem 0.5rem;
 
+  :hover {
+    cursor: pointer;
+  }
   .name {
     color: #4a5568;
     font-size: 1rem;
     padding: 0.5rem 0;
+    margin: 0;
     font-weight: 600;
+  }
+
+  .name:hover {
+    text-decoration: underline;
   }
 
   .image {
@@ -159,4 +177,6 @@ const Card = styled.div`
 const SectionHeader = styled.p`
   font-size: 1.5rem;
   font-weight: 1000;
+  margin: 0;
+  padding-left: 10px;
 `;

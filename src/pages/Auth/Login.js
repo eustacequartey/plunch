@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import logo from "../../assets/images/plogosmall.png";
-
+import { Spinner } from "evergreen-ui";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
-import { notification } from "antd";
-import { CloseCircleOutlined } from "@ant-design/icons";
+import { AppContext } from "../../context/";
+import { notification, Space } from "antd";
 
 const LOGIN = gql`
   mutation LOGIN($email: String!, $password: String!) {
@@ -15,10 +15,22 @@ const LOGIN = gql`
         email
         firstName
         lastName
+        activated
+        hasChangedPassword
       }
     }
   }
 `;
+
+function _saveUserData(token, user) {
+  localStorage.setItem("AUTH_TOKEN", token);
+  localStorage.setItem("USER", JSON.stringify(user));
+}
+
+async function _confirm(data) {
+  const { token } = await data.login.token;
+  _saveUserData(token);
+}
 
 const Login = () => {
   return (
@@ -48,11 +60,16 @@ const LeftPane = () => {
 const RightPane = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [login] = useMutation(LOGIN);
+  const [login, { loading }] = useMutation(LOGIN);
+  const { toggleLoggedIn } = useContext(AppContext);
 
   return (
     <div className="right">
-      <form className="form" onSubmit={onSubmit}>
+      <form
+        className="form"
+        onSubmit={(e) => {
+          loginFunction(e);
+        }}>
         <div className="heading">Login Portal</div>
         <div>
           <p className="label">EMAIL</p>
@@ -62,6 +79,7 @@ const RightPane = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="eg: xyz@persol.net"
+            required
           />
         </div>
 
@@ -71,6 +89,7 @@ const RightPane = () => {
             className="input"
             type="password"
             name="password"
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -83,28 +102,34 @@ const RightPane = () => {
           value="yes"
         />
 
-        <label className="checkbox-label" for="savepassword">
-          Remember me?
-        </label>
-        <div>
-          <input className="submit" type="submit" value="Submit" />
-        </div>
+        <label className="checkbox-label">Remember me?</label>
+        <button aria-hidden="true" className="submit" type="submit">
+          {loading ? "loading" : "SUBMIT"}
+        </button>
       </form>
     </div>
   );
 
-  async function onSubmit(e) {
+  function loginFunction(e) {
     e.preventDefault();
 
-    if (!email || !password) {
-      notification.open({
-        message: "Kindly Fill All Fields",
-        description: "All fields in login form are required",
-        icon: <CloseCircleOutlined style={{ color: "tomato" }} />,
+    login({ variables: { email, password } })
+      .then(({ data }) => {
+        console.log(data);
+        _saveUserData(data.login.token, data.login.user);
+        toggleLoggedIn();
+      })
+      .catch((error) => {
+        notification["error"]({
+          message: "Error",
+          description: error.message,
+        });
       });
-    }
-    // let ret = await login({ variables: { email, password } });
-    // console.log(ret);
+  }
+
+  function reset() {
+    setEmail("");
+    setPassword("");
   }
 };
 

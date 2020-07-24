@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 
 //Apollo Client
 import { ApolloClient } from "apollo-client";
@@ -14,7 +14,7 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("AUTH_TOKEN");
   return {
     headers: {
       ...headers,
@@ -29,9 +29,24 @@ const client = new ApolloClient({
 });
 
 const Provider = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [profile, mutateProfile] = useState({});
-  const [currentOrder, setCurrentOrder] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentOrder, setCurrentOrder] = useState({
+    mainDish: "",
+    sideDish: "",
+    protein: "",
+    createdBy: localStorage.getItem("USER")
+      ? JSON.parse(localStorage.getItem("USER")).id
+      : "",
+  });
+
+  useEffect(() => {
+    console.log(currentOrder);
+    if (localStorage.getItem("AUTH_TOKEN")) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
 
   return (
     <>
@@ -39,9 +54,11 @@ const Provider = (props) => {
         value={{
           isLoggedIn,
           toggleLoggedIn,
-          profile,
-          setProfile,
+          onLogout,
           currentOrder,
+          setMainDish,
+          setSideDish,
+          setProtein,
         }}>
         <ApolloProvider client={client}>{props.children}</ApolloProvider>
       </AppContext.Provider>
@@ -52,8 +69,23 @@ const Provider = (props) => {
     return setIsLoggedIn(!isLoggedIn);
   }
 
-  function setProfile(profile) {
-    return mutateProfile(profile);
+  function onLogout() {
+    client.resetStore();
+    localStorage.removeItem("AUTH_TOKEN");
+    localStorage.removeItem("USER");
+    toggleLoggedIn();
+  }
+
+  function setMainDish(id) {
+    return setCurrentOrder({ ...currentOrder, mainDish: id });
+  }
+
+  function setSideDish(id) {
+    return setCurrentOrder({ ...currentOrder, sideDish: id });
+  }
+
+  function setProtein(id) {
+    return setCurrentOrder({ ...currentOrder, protein: id });
   }
 };
 

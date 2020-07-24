@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { Skeleton } from "antd";
 import styled from "styled-components";
+import { AppContext } from "../../context/";
 
 const GET_SIDE_DISHES = gql`
   {
@@ -37,8 +38,8 @@ function Display({ data }) {
 
   return (
     <>
-      {Object.keys(FoodData).map((el) => (
-        <Row title={el} data={FoodData[el]} />
+      {Object.keys(FoodData).map((el, index) => (
+        <Row title={el} key={index} data={FoodData[el]} />
       ))}
     </>
   );
@@ -69,6 +70,7 @@ function Row({ title, data }) {
             key={sidedish.id}
             name={sidedish.name}
             type={sidedish.type}
+            id={sidedish.id}
           />
         ))}
       </Sheet>
@@ -76,15 +78,16 @@ function Row({ title, data }) {
   );
 }
 
-function FoodCard({ name, type }) {
+function FoodCard({ name, type, id }) {
   const typesrcs = {
     DUMPLING:
       "https://images.pexels.com/photos/3758959/pexels-photo-3758959.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
     RICE:
-      "https://images.pexels.com/photos/1624487/pexels-photo-1624487.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      "https://images.unsplash.com/photo-1580214082644-762fffd1e355?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1052&q=80",
     HOTSAUCE:
       "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2011/5/9/0/FNM_060111-Insert-008-d_s4x3.jpg.rend.hgtvcom.616.462.suffix/1371597500184.jpeg",
   };
+  const { setSideDish, currentOrder } = useContext(AppContext);
 
   return (
     <Card>
@@ -95,7 +98,18 @@ function FoodCard({ name, type }) {
           "https://images.pexels.com/photos/616404/pexels-photo-616404.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
         }
       />
-      <h4 className="name">{name}</h4>
+      <div className="bottom1">
+        <h4
+          style={{
+            textDecoration: currentOrder.sideDish === id ? "underline" : "none",
+          }}
+          onClick={() => {
+            setSideDish(id);
+          }}
+          className="name">
+          {name.toUpperCase()}
+        </h4>
+      </div>
     </Card>
   );
 }
@@ -119,11 +133,20 @@ const Card = styled.div`
   word-wrap: break-word;
   margin: 0.5rem 0.5rem;
 
+  :hover {
+    cursor: pointer;
+  }
+
   .name {
     color: #4a5568;
     font-size: 1rem;
     padding: 0.5rem 0;
     font-weight: 600;
+    margin: 0;
+  }
+
+  .name:hover {
+    text-decoration: underline;
   }
 
   .image {
@@ -155,4 +178,6 @@ const Card = styled.div`
 const SectionHeader = styled.p`
   font-size: 1.5rem;
   font-weight: 1000;
+  margin: 0;
+  padding-left: 10px;
 `;
