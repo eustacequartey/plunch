@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { AppContext } from "../../context/";
-
+import moment from "moment";
 import { useMutation } from "@apollo/react-hooks";
 import CREATE_ORDER from "../../graphql/mutations/order";
 import { message, notification } from "antd";
@@ -20,9 +20,16 @@ const ConfirmButton = () => {
 
   function onConfirm() {
     if (currentOrder.mainDish !== "" && currentOrder.sideDish !== "") {
-      createOrder({ variables: currentOrder })
+      createOrder({
+        variables: {
+          createdFor: moment().format(),
+          main: currentOrder.mainDish,
+          side: currentOrder.sideDish,
+          protein: currentOrder.protein,
+        },
+      })
         .then(({ data }) => {
-          console.log(data);
+          message.success("success");
         })
         .catch((error) => {
           notification["error"]({
@@ -36,19 +43,6 @@ const ConfirmButton = () => {
   }
 };
 
-// login({ variables: { email, password } })
-// .then(({ data }) => {
-//   console.log(data);
-//   _saveUserData(data.login.token, data.login.user);
-//   setProfile(data.login.user);
-//   toggleLoggedIn();
-// })
-// .catch((error) => {
-//   notification["error"]({
-//     message: "Error",
-//     description: error.message,
-//   });
-// });
 export default ConfirmButton;
 
 const ConfirmButtonSheet = styled.div`
@@ -61,7 +55,7 @@ const ConfirmButtonSheet = styled.div`
 
   button{
    padding:4px 10px;
-   border:1px solid #a0d2eb;
+   border:1px solid #718096;
    margin:0 .5rem;
    box-sizing: border-box;
    text-decoration:none;
@@ -73,8 +67,8 @@ const ConfirmButtonSheet = styled.div`
   }
   button:hover{
     color: #fff;
-    background-color: #a0d2eb;
-    border: 0.1em solid #a0d2eb;
+    background-color: #718096;
+    border: 0.1em solid #718096;
 
     .text{
       color: #fff;

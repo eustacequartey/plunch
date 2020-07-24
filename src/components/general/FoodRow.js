@@ -90,27 +90,29 @@ function FoodCard({ name, type, id }) {
   };
   const { setMainDish, currentOrder } = useContext(AppContext);
   return (
-    <Card>
-      <img
-        className={"image"}
-        src={
-          typesrcs[type] ||
-          "https://images.pexels.com/photos/616404/pexels-photo-616404.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-        }
-      />
-      <div className="bottom1">
-        <h4
-          style={{
-            textDecoration: currentOrder.mainDish === id ? "underline" : "none",
-          }}
-          onClick={() => {
-            setMainDish(id);
-          }}
-          className="name">
-          {name.toUpperCase()}
-        </h4>
-      </div>
-    </Card>
+    <div>
+      <Card
+        onClick={() => {
+          setMainDish(id);
+        }}
+        style={{
+          border:
+            currentOrder.mainDish === id
+              ? "2px dotted #2C7A7B"
+              : "1px solid #cbd5e0",
+        }}>
+        <img
+          className={"image"}
+          src={
+            typesrcs[type] ||
+            "https://images.pexels.com/photos/616404/pexels-photo-616404.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+          }
+        />
+        <div className="bottom1">
+          <h4 className="name">{name.toUpperCase()}</h4>
+        </div>
+      </Card>
+    </div>
   );
 }
 

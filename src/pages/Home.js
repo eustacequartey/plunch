@@ -31,7 +31,7 @@ const Home = () => {
       </div>
 
       <div>
-        <Lottie options={defaultOptions} height={700} />
+        <Lottie options={defaultOptions} height={300} width={300} />
       </div>
     </HomePageSheet>
   );
@@ -69,7 +69,7 @@ const HomePageSheet = styled.div`
     background-color: #fff;
     display: inline-block;
      padding: 4px 10px;
-     border: 1px solid #a0d2eb;
+     border: 1px solid #718096;
      margin: 0 0 0 1rem;
      box-sizing: border-box;
      text-decoration: none;
@@ -83,8 +83,8 @@ const HomePageSheet = styled.div`
 
   .logoutButton:hover {
     color: #fff;
-    background-color: #a0d2eb;
-    border: 0.1em solid #a0d2eb;
+    background-color: #718096;
+    border: 0.1em solid #718096;
 
     .logoutText {
       color: #fff;

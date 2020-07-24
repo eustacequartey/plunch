@@ -9,11 +9,13 @@ import user from "../../assets/images/user.png";
 import settings from "../../assets/images/settings.png";
 import avatar from "../../assets/images/avatar.png";
 import heart from "../../assets/images/heart.png";
-import bell from "../../assets/images/bell.png";
+
 import users from "../../assets/images/users.png";
 import { NavLink } from "react-router-dom";
 import OrderFlow from "./OrderFlow";
 import Summary from "./Summary";
+import OrderFlowContainer from "./OrderFlowContainer";
+import Profile from "./Profile";
 
 const Dashboard = (props) => {
   return (
@@ -48,41 +50,18 @@ const Dashboard = (props) => {
       </Toolbar>
       <Content>{props.children}</Content>
       <Sidebar>
-        <div className="top">
-          <div className="widget">
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <div>
-                <StyledImage src={avatar} />
-              </div>
-              <div>
-                <p style={{ padding: "0 .5rem", margin: 0 }}>
-                  Hello,{" "}
-                  {JSON.parse(localStorage.getItem("USER")).firstName || "USER"}
-                </p>
-              </div>
+        <Profile />
+        <div className="bottom">
+          <div className="topBottomSidebar">
+            <div>
+              <h3 style={{ fontSize: "2rem", color: "#  4A5568" }}>
+                Orders {<span style={{ color: "#718096" }}>Flow</span>}
+              </h3>
             </div>
 
-            <div style={{ display: "flex" }}>
-              <StyledImage src={bell} />
-            </div>
+            <OrderFlowContainer />
           </div>
-        </div>
-        <div className="bottom">
-          <div>
-            <h3 style={{ fontSize: "2rem" }}>
-              Orders {<span style={{ color: "#979797" }}>Flow</span>}
-            </h3>
-          </div>
-          <div>
-            <OrderFlow />
-            <OrderFlow delivered={true} />
-          </div>
-          <div style={{ marginTop: "auto" }}>
+          <div className="bottomBottomSidebar">
             <Summary />
           </div>
         </div>
@@ -135,33 +114,39 @@ const Sidebar = styled.div`
   flex-basis: 23%;
   display: flex;
   flex-direction: column;
-  background-color: #f5f5f5;
+  background-color: #fff;
   max-height: 100vh;
 
   @media only screen and (max-width: 1151px) {
     display: none;
   }
 
-  .top {
-    background-color: #262444;
-    color: #fff;
-    flex-basis: 13%;
-    display: flex;
-    padding: 0 2rem;
-    align-items: center;
-
-    .widget {
-      display: flex;
-      flex: 1;
-      justify-content: space-between;
-    }
-  }
-
   .bottom {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: 2rem 2rem;
+    padding: 2rem 0 0 0;
+    background: linear-gradient(
+      to bottom,
+      #ffffff,
+      #ffffff,
+      #ffffff,
+      #ffffff,
+      #ffffff,
+      #e2e8f0,
+      #e2e8f0,
+      #e2e8f0
+    );
+
+    .topBottomSidebar {
+      flex: 0.7;
+      padding: 0 2rem;
+    }
+
+    .bottomBottomSidebar {
+      display: flex;
+      flex: 0.3;
+    }
 
     h3 {
       font-size: 1.5rem;
