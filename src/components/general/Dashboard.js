@@ -7,12 +7,9 @@ import cash from "../../assets/images/cash.png";
 import signs from "../../assets/images/signs.png";
 import user from "../../assets/images/user.png";
 import settings from "../../assets/images/settings.png";
-import avatar from "../../assets/images/avatar.png";
 import heart from "../../assets/images/heart.png";
-
 import users from "../../assets/images/users.png";
 import { NavLink } from "react-router-dom";
-import OrderFlow from "./OrderFlow";
 import Summary from "./Summary";
 import OrderFlowContainer from "./OrderFlowContainer";
 import Profile from "./Profile";

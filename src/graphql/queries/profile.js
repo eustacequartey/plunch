@@ -8,6 +8,8 @@ const GET_PROFILE = gql`
       lastName
       email
       password
+      activated
+      admin
     }
   }
 `;

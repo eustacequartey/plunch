@@ -43,10 +43,7 @@ const Fetcher = () => {
     return <Skeleton />;
   }
   if (error) {
-    return notification["error"]({
-      message: "Error",
-      description: error.message,
-    });
+    return <p>{error.message}</p>;
   }
   return <FormDisplay profile={data.profile} />;
 };
