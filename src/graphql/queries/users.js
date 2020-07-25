@@ -1,17 +1,16 @@
 import gql from "graphql-tag";
 
-const GET_PROFILE = gql`
+export default gql`
   {
-    profile {
+    users {
+      id
       firstName
       otherNames
       lastName
       email
-      password
-      activated
+      hasChangedPassword
       role
+      activated
     }
   }
 `;
-
-export default GET_PROFILE;

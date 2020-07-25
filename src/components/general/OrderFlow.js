@@ -3,7 +3,7 @@ import styled from "styled-components";
 import user from "../../assets/images/check.png";
 import { Tag } from "antd";
 import "antd/dist/antd.css";
-
+import moment from "moment";
 import Lottie from "react-lottie";
 import animationData from "../../assets/lottie/delivereddfkm.json";
 
@@ -28,14 +28,34 @@ const OrderFlow = (props) => {
       </div>
       <div className="rightOrderFlow">
         <div className="topRightOrderFlow">
-          <h4>Yesterday</h4>
-          <h5>8:29am</h5>
+          <h4>
+            {moment(props.createdAt).calendar({
+              sameDay: "[Today]",
+              nextDay: "[Tomorrow]",
+              nextWeek: "dddd",
+              lastDay: "[Yesterday]",
+              lastWeek: "[Last] dddd",
+              sameElse: "DD/MM/YYYY",
+            })}
+          </h4>
+          <h5>{moment(props.createdAt).format("h:mm a")}</h5>
         </div>
         <div className="bottomRightOrderFlow">
           <Tag color={props.delivered === true ? "success" : "orange"}>
             {props.delivered === true ? "delivered" : "pending"}
           </Tag>
-          <h6>{props.delivered === true ? "12:56pm" : "..."}</h6>
+          <h6>
+            {props.deliveredAt
+              ? moment(props.deliveredAt).calendar({
+                  sameDay: "[Today]",
+                  nextDay: "[Tomorrow]",
+                  nextWeek: "dddd",
+                  lastDay: "[Yesterday]",
+                  lastWeek: "[Last] dddd",
+                  sameElse: "DD/MM/YYYY",
+                })
+              : "..."}
+          </h6>
         </div>
       </div>
     </StyledOrderFlow>

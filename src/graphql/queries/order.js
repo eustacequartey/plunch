@@ -5,10 +5,13 @@ export default gql`
     orders {
       id
       createdAt
+      createdFor
       createdBy {
+        firstName
+        otherNames
+        lastName
         email
       }
-      createdFor
       main {
         name
       }
@@ -19,6 +22,7 @@ export default gql`
         name
       }
       delivered
+      deliveredAt
     }
   }
 `;

@@ -10,3 +10,4 @@ export { default as ConfirmButton } from "./ConfirmButton";
 export { default as Switch } from "./Switch";
 export { default as OrderFlowContainer } from "./OrderFlowContainer";
 export { default as Profile } from "./Profile";
+export { default as OrderHistoryFetch } from "./OrderHistoryFetch";

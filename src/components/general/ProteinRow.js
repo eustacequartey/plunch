@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
-import { Spin, Skeleton } from "antd";
+import { Skeleton, Empty } from "antd";
 import styled from "styled-components";
 import { AppContext } from "../../context/";
 
@@ -21,12 +21,11 @@ function Protein({}) {
   if (loading)
     return (
       <>
-        <Skeleton paragraph={{ rows: 4 }} active />;
-        <Skeleton paragraph={{ rows: 4 }} active />;
-        <Skeleton paragraph={{ rows: 4 }} active />;
+        <Skeleton paragraph={{ rows: 4 }} active />
+        <Skeleton paragraph={{ rows: 4 }} active />
       </>
     );
-  if (error) return `Error! ${error.message}`;
+  if (error) return <Empty description={error.message} />;
   if (data) return <Display data={data} />;
 }
 

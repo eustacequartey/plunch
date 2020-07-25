@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import bell from "../../assets/images/bell.png";
-import avatar from "../../assets/images/avatar.png";
 import Lottie from "react-lottie";
 import animationData from "../../assets/lottie/8603-profile.json";
 
@@ -25,7 +24,7 @@ const Profile = () => {
           <h4>{`${user.firstName} ${user.otherNames || ""} ${
             user.lastName
           }`}</h4>
-          <h6>admin</h6>
+          <h6>{user.role}</h6>
         </div>
       </div>
     </ProfileSheet>
@@ -51,7 +50,7 @@ const ProfileSheet = styled.div`
   h6 {
     margin: 0;
     color: #fff;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
   .topProfileSheet {
     flex: 0.1;

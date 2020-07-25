@@ -6,6 +6,7 @@ export default gql`
       orders {
         id
         delivered
+        deliveredAt
         createdAt
         createdFor
         main {

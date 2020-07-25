@@ -5,7 +5,7 @@ import Lottie from "react-lottie";
 import animationData from "../assets/lottie/8603-profile.json";
 import GET_PROFILE from "../graphql/queries/profile";
 import { useQuery } from "@apollo/react-hooks";
-import { Form, Input, Button, notification, Skeleton, Switch } from "antd";
+import { Form, Input, Button, Skeleton, Switch } from "antd";
 
 const defaultOptions = {
   loop: true,

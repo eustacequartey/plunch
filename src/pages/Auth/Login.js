@@ -17,6 +17,7 @@ const LOGIN = gql`
         lastName
         activated
         hasChangedPassword
+        role
       }
     }
   }

@@ -13,7 +13,7 @@ const Summary = () => {
         </div>
       </div>
       <div className="rightSummary">
-        <h4>$5.55</h4>
+        <h4>GH₵5.55</h4>
       </div>
     </StyledSummary>
   );
@@ -40,7 +40,7 @@ const StyledSummary = styled.div`
     // border: 1px solid black;
   }
   h4 {
-    font-size: 4rem;
+    font-size: 3rem;
     font-weight: 700;
     margin: 0;
     padding: 0 0 0 0;

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import UsersFetch from "../components/general/User";
+import OrderHistoryFetch from "../components/general/OrderHistoryFetch";
 
 import animationData from "../assets/lottie/4776-graph.json";
 import Lottie from "react-lottie";
@@ -14,24 +14,24 @@ const defaultOptions = {
   },
 };
 
-const Users = () => {
+const OrderHistory = () => {
   return (
-    <UsersBottomSheet>
+    <OrderHistoryBottomSheet>
       <div className="header">
         <div>
-          <h4>Users</h4>
+          <h4>Order History</h4>
         </div>
       </div>
       <div className="content">
-        <UsersFetch />
+        <OrderHistoryFetch />
       </div>
-    </UsersBottomSheet>
+    </OrderHistoryBottomSheet>
   );
 };
 
-export default Users;
+export default OrderHistory;
 
-const UsersBottomSheet = styled.div`
+const OrderHistoryBottomSheet = styled.div`
   display: flex;
   flex: 1;
   border: 1px dotted #e2e8f0;

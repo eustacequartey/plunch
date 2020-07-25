@@ -18,7 +18,7 @@ const defaultOptions = {
 const { Option } = Select;
 
 const Order = () => {
-  const [selection, setselection] = React.useState("mains");
+  const [selection, setselection] = React.useState("sides");
 
   const onGenderChange = (value) => {
     setselection(value);
@@ -56,8 +56,6 @@ const Order = () => {
   function handleselectionChange(e) {
     setselection(e.target.value);
   }
-
-  function createOrderFunction() {}
 };
 
 export default Order;

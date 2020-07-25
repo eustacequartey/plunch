@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
-import { Skeleton } from "antd";
+import { Skeleton, Empty, Space } from "antd";
 import styled from "styled-components";
 import { AppContext } from "../../context/";
 
@@ -21,12 +21,16 @@ function Main({}) {
   if (loading)
     return (
       <>
-        <Skeleton paragraph={{ rows: 4 }} active />;
-        <Skeleton paragraph={{ rows: 4 }} active />;
-        <Skeleton paragraph={{ rows: 4 }} active />;
+        <Skeleton paragraph={{ rows: 4 }} active />
+        <Skeleton paragraph={{ rows: 4 }} active />
       </>
     );
-  if (error) return `Error! ${error.message}`;
+  if (error)
+    return (
+      <Space>
+        <Empty description={error.message} />{" "}
+      </Space>
+    );
   if (data) return <Display data={data} />;
 }
 
