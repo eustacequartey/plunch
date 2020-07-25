@@ -65,41 +65,46 @@ const RightPane = () => {
   const { toggleLoggedIn } = useContext(AppContext);
 
   return (
-    <div className="right">
-      <form
-        className="form"
-        onSubmit={(e) => {
-          loginFunction(e);
-        }}>
-        <div className="heading">Login Portal</div>
-        <div>
-          <p className="label">EMAIL</p>
-          <input
-            className="input"
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="eg: xyz@persol.net"
-            required
-          />
-        </div>
+    <div>
+      <img className="logo" src={logo} />
 
-        <div>
-          <p className="label">PASSWORD</p>
-          <input
-            className="input"
-            type="password"
-            name="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+      <div className="right">
+        <form
+          className="form"
+          onSubmit={(e) => {
+            loginFunction(e);
+          }}
+        >
+          <div className="heading">Login Portal</div>
+          <div>
+            <p className="label">EMAIL</p>
+            <input
+              className="input"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="eg: xyz@persol.net"
+              required
+            />
+          </div>
 
-        <button aria-hidden="true" className="submit" type="submit">
-          {loading ? "loading" : "SUBMIT"}
-        </button>
-      </form>
+          <div>
+            <p className="label">PASSWORD</p>
+            <input
+              className="input"
+              type="password"
+              name="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+
+          <button aria-hidden="true" className="submit" type="submit">
+            {loading ? "loading" : "SUBMIT"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 
