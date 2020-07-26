@@ -10,6 +10,9 @@ const GET_PROFILE = gql`
       password
       activated
       role
+      dob
+      address
+      phone
     }
   }
 `;

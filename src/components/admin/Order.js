@@ -10,7 +10,9 @@ import {
   notification,
 } from "antd";
 import ORDERS from "../../graphql/queries/order";
+import SET_TODAY_DELIVERED from "../../graphql/mutations/setBatchDelivered";
 import SET_DELIVERED from "../../graphql/mutations/setDelivered";
+import MY_ORDERS from "../../graphql/queries/myOrders";
 import { Button } from "evergreen-ui";
 import moment from "moment";
 import ConvertToExcel from "./ConvertToExcel";
@@ -31,8 +33,9 @@ export default Order;
 
 function Display({ data }) {
   const orderData = data.orders;
-  const [printDate, setPrintDate] = useState(moment());
+  const [date, setDate] = useState(moment());
   const [setDelivered, { loading }] = useMutation(SET_DELIVERED);
+  const [setTodayDelivered, { loading1 }] = useMutation(SET_TODAY_DELIVERED);
   const [save, setSave] = useState(false);
 
   const columns = [
@@ -83,13 +86,6 @@ function Display({ data }) {
       key: "protein",
       render: (data) => <>{data.name}</>,
     },
-    // {
-    //   title: "Comments",
-    //   key: "comments",
-    //   key: "comments",
-    // width: 100,
-    // render: (data) => <p>{data}</p>,
-    // },
     {
       title: "DELIVERED",
       dataIndex: "delivered",
@@ -109,6 +105,7 @@ function Display({ data }) {
       width: 100,
       render: (data, obj) => (
         <AntdButton
+          ghost={true}
           onClick={() => {
             setDelivered({
               variables: { id: obj.id },
@@ -124,7 +121,6 @@ function Display({ data }) {
                 });
               });
           }}
-          loading={loading}
           type="primary"
           disabled={data.delivered}
           icon={<CheckCircleOutlined />}
@@ -136,18 +132,32 @@ function Display({ data }) {
   return (
     <>
       <div style={{ padding: "1rem 0" }}>
-        <DatePicker onChange={onChange} allowClear={false} />
+        <DatePicker
+          onChange={onChange}
+          allowClear={false}
+          defaultValue={moment()}
+        />
 
         <Button
           marginLeft={16}
-          // marginRight={16}
           appearance="primary"
           intent="none"
+          isLoading={loading1}
           onClick={() => {
-            setSave(!save);
-            message.success("Done");
+            setTodayDelivered({
+              refetchQueries: [{ query: ORDERS }, { query: MY_ORDERS }],
+            })
+              .then(() => {
+                message.success("Success");
+              })
+              .catch((error) =>
+                notification["error"]({
+                  title: "Error",
+                  description: error.message,
+                })
+              );
           }}>
-          Mark Day Delivered
+          Set Day Delivered
         </Button>
 
         <Button
@@ -156,13 +166,13 @@ function Display({ data }) {
           appearance="primary"
           intent="none"
           onClick={() => {
-            setSave(!save);
+            // setSave(!save);
             message.success("Done");
           }}>
           Export To Excel Sheet
         </Button>
 
-        {save && <ConvertToExcel />}
+        <ConvertToExcel />
       </div>
       <Table
         bordered
@@ -179,6 +189,7 @@ function Display({ data }) {
   );
 
   function onChange(date, dateString) {
-    console.log(date, dateString);
+    // console.log(date, dateString);
+    setDate(date.format());
   }
 }

@@ -21,6 +21,7 @@ export default gql`
       protein {
         name
       }
+      comments
       delivered
       deliveredAt
     }

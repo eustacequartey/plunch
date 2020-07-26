@@ -28,16 +28,14 @@ const Dashboard = (props) => {
             <NavLink to="/history" exact={true}>
               <StyledImage src={charts} />
             </NavLink>
-
-            {JSON.parse(localStorage.getItem("USER")).role === "ADMIN" && (
-              <NavLink to="/admin">
-                <StyledImage src={admin} />
-              </NavLink>
-            )}
           </div>
         </div>
         <div className="group">
-          <StyledImage src={heart} />
+          {JSON.parse(localStorage.getItem("USER")).role === "ADMIN" && (
+            <NavLink to="/admin">
+              <StyledImage src={admin} />
+            </NavLink>
+          )}
           <NavLink to="/profile" exact={true}>
             <StyledImage src={settings} />
           </NavLink>

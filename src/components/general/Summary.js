@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import moment from "moment";
+import numeral from "numeral";
 import { useQuery } from "@apollo/react-hooks";
 import MY_ORDERS from "../../graphql/queries/myOrders";
 import { Spin } from "antd";
@@ -37,7 +38,7 @@ const Summary = () => {
         );
       });
 
-    let amountSpent = 0;
+    let amountSpent = 0.0;
     ordersInMonth &&
       ordersInMonth.forEach((order) => {
         if (order.main.name.toLowerCase().includes("soup")) {
@@ -47,7 +48,7 @@ const Summary = () => {
         }
       });
 
-    return amountSpent;
+    return numeral(amountSpent).format("0.00");
   }
 };
 
@@ -72,7 +73,7 @@ const StyledSummary = styled.div`
     // border: 1px solid black;
   }
   h4 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 700;
     margin: 0;
     padding: 0 0 0 0;
