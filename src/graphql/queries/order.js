@@ -24,6 +24,7 @@ export default gql`
       comments
       delivered
       deliveredAt
+      feedback
     }
   }
 `;

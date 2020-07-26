@@ -14,9 +14,7 @@ const defaultOptions = {
   },
 };
 
-const Admin = () => {
-  const { onLogout } = useContext(AppContext);
-
+const Admin = (props) => {
   return (
     <AdminPageSheet>
       <div className="header">
@@ -24,7 +22,7 @@ const Admin = () => {
           <h4>Administrator Portal</h4>
         </div>
       </div>
-      <Board />
+      <Board sub={props.match.params.sub} push={props.history.push} />
     </AdminPageSheet>
   );
 };

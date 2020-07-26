@@ -25,7 +25,7 @@ const contentListNoTitle = {
   food: <Food />,
 };
 
-function TabCard() {
+function Board() {
   const [noTitleKey, setNoTitleKey] = React.useState("users");
 
   function onTabChange(key, type) {
@@ -47,4 +47,4 @@ function TabCard() {
   );
 }
 
-export default TabCard;
+export default Board;

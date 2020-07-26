@@ -5,8 +5,10 @@ import GET_ORDERS from "../../graphql/queries/orderBatch";
 import moment from "moment";
 import { Spin } from "antd";
 
-const ConvertToExcel = (date) => {
-  const { error, loading, data } = useQuery(GET_ORDERS);
+const ConvertToExcel = ({ date = moment().format() }) => {
+  const { error, loading, data } = useQuery(GET_ORDERS, {
+    variables: { date },
+  });
 
   const className = "class-name-for-style";
   const filename = "Order_Sheet";

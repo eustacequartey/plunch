@@ -5,9 +5,11 @@ import {
   Table,
   Empty,
   message,
+  Popover,
   DatePicker,
   Button as AntdButton,
   notification,
+  Space,
 } from "antd";
 import ORDERS from "../../graphql/queries/order";
 import SET_TODAY_DELIVERED from "../../graphql/mutations/setBatchDelivered";
@@ -101,31 +103,43 @@ function Display({ data }) {
     {
       title: "Action",
       key: "operation",
-      fixed: "right",
-      width: 100,
-      render: (data, obj) => (
-        <AntdButton
-          ghost={true}
-          onClick={() => {
-            setDelivered({
-              variables: { id: obj.id },
-              refetchQueries: [{ query: ORDERS }],
-            })
-              .then(() => {
-                message.success("Successful");
-              })
-              .catch((error) => {
-                notification["error"]({
-                  message: "Error",
-                  description: error.message,
-                });
-              });
-          }}
-          type="primary"
-          disabled={data.delivered}
-          icon={<CheckCircleOutlined />}
-        />
-      ),
+
+      render: (data, obj) => {
+        const content = (
+          <div>
+            <p>{obj.feedback || "No Feedback Yet"}</p>
+          </div>
+        );
+        return (
+          <Space>
+            <AntdButton
+              ghost={true}
+              onClick={() => {
+                setDelivered({
+                  variables: { id: obj.id },
+                  refetchQueries: [{ query: ORDERS }],
+                })
+                  .then(() => {
+                    message.success("Successful");
+                  })
+                  .catch((error) => {
+                    notification["error"]({
+                      message: "Error",
+                      description: error.message,
+                    });
+                  });
+              }}
+              type="primary"
+              disabled={data.delivered}
+              icon={<CheckCircleOutlined />}
+            />
+            <Popover content={content} title="Feedback">
+              <AntdButton type="primary">Feedback</AntdButton>
+            </Popover>
+            ,
+          </Space>
+        );
+      },
     },
   ];
 
@@ -166,13 +180,12 @@ function Display({ data }) {
           appearance="primary"
           intent="none"
           onClick={() => {
-            // setSave(!save);
-            message.success("Done");
+            setSave(!save);
           }}>
           Export To Excel Sheet
         </Button>
 
-        <ConvertToExcel />
+        {save && <ConvertToExcel date={date.format()} />}
       </div>
       <Table
         bordered
@@ -190,6 +203,6 @@ function Display({ data }) {
 
   function onChange(date, dateString) {
     // console.log(date, dateString);
-    setDate(date.format());
+    setDate(date);
   }
 }

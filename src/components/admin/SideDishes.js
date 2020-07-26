@@ -1,10 +1,11 @@
 import React from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import GET_SIDE_DISHES from "../../graphql/queries/sideDishes";
+import CREATE_SIDE_DISH from "../../graphql/mutations/createSideDish";
+
 import {
   Table,
   Button,
-  message,
   Space,
   Result,
   Drawer,
@@ -12,9 +13,11 @@ import {
   Row,
   Col,
   Select,
-  DatePicker,
+  message,
+  notification,
   Input,
 } from "antd";
+
 import { Button as EButton } from "evergreen-ui";
 import styled from "styled-components";
 const { Option } = Select;
@@ -22,6 +25,10 @@ const { Option } = Select;
 const Side = () => {
   const { loading, error, data } = useQuery(GET_SIDE_DISHES);
   const [visible, setVisible] = React.useState(false);
+  const [createSideDish, { loading1 }] = useMutation(CREATE_SIDE_DISH);
+
+  const [name, setName] = React.useState("");
+  const [type, setType] = React.useState("DUMPLING");
 
   function showDrawer() {
     setVisible(true);
@@ -46,11 +53,7 @@ const Side = () => {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      render: (text, record) => (
-        <Space size="middle">
-          <Button onClick={() => message.success("Hi")}></Button>
-        </Space>
-      ),
+      render: (data, object) => <a>Delete</a>,
     },
   ];
 
@@ -95,7 +98,7 @@ const Side = () => {
             <Button onClick={onClose} style={{ marginRight: 8 }}>
               Cancel
             </Button>
-            <Button onClick={onClose} type="primary">
+            <Button onClick={onSubmit} type="primary">
               Submit
             </Button>
           </div>
@@ -107,7 +110,11 @@ const Side = () => {
                 name="name"
                 label="Name"
                 rules={[{ required: true, message: "Please enter name" }]}>
-                <Input placeholder="Please enter name" />
+                <Input
+                  placeholder="Please enter name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -115,7 +122,10 @@ const Side = () => {
                 name="type"
                 label="Type"
                 rules={[{ required: true, message: "Please select a type" }]}>
-                <Select placeholder="Please select a type">
+                <Select
+                  placeholder="Please select a type"
+                  value={type}
+                  onChange={(value) => setType(value)}>
                   <Option value="RICE">Rice</Option>
                   <Option value="DUMPLING">Dumpling</Option>
                 </Select>
@@ -126,6 +136,23 @@ const Side = () => {
       </Drawer>
     </Sheet>
   );
+
+  function onSubmit() {
+    createSideDish({
+      variables: { name, type },
+      refetchQueries: [{ query: GET_SIDE_DISHES }],
+    })
+      .then(() => {
+        message.success("Successful");
+        onClose();
+      })
+      .catch((error) => {
+        return notification["error"]({
+          description: error.message,
+          message: "Error",
+        });
+      });
+  }
 };
 
 export default Side;

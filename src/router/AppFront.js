@@ -24,7 +24,10 @@ const Router = () => {
           <Route path="/profile" component={Profile} />
           <Route path="/history" component={OrderHistory} />
           {JSON.parse(localStorage.getItem("USER")).role === "ADMIN" && (
-            <Route path="/admin" component={Admin} />
+            <>
+              <Route path="/admin/:sub" component={Admin} />
+              <Route path="/admin" exact={true} component={Admin} />
+            </>
           )}
           <Route component={PageNotFound} />
         </Switch>

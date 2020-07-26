@@ -58,11 +58,7 @@ const Main = () => {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      render: (text, record) => (
-        <Space size="middle">
-          <Button onClick={() => message.success("Hi")}></Button>
-        </Space>
-      ),
+      render: (data, object) => <a>Delete</a>,
     },
   ];
 
