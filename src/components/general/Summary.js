@@ -1,8 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import moment from "moment";
+import { useQuery } from "@apollo/react-hooks";
+import MY_ORDERS from "../../graphql/queries/myOrders";
+import { Spin } from "antd";
 
 const Summary = () => {
+  const { error, loading, data } = useQuery(MY_ORDERS);
+
+  console.log(data && data.profile.orders);
+
   return (
     <StyledSummary>
       <div className="leftSummary">
@@ -14,10 +21,34 @@ const Summary = () => {
         </div>
       </div>
       <div className="rightSummary">
-        <h4>GH₵5.55</h4>
+        {loading && <Spin size="large" />}
+        {data && <h4>GH₵{calculateMonthPrice(data.profile.orders)}</h4>}
       </div>
     </StyledSummary>
   );
+
+  function calculateMonthPrice(orders) {
+    const ordersInMonth =
+      orders &&
+      orders.filter((order) => {
+        return (
+          moment(order.createdAt).isSameOrAfter(moment().startOf("month")) &&
+          moment(order.createdAt).isSameOrBefore(moment().endOf("month"))
+        );
+      });
+
+    let amountSpent = 0;
+    ordersInMonth &&
+      ordersInMonth.forEach((order) => {
+        if (order.main.name.toLowerCase().includes("soup")) {
+          amountSpent += 6;
+        } else {
+          amountSpent += 5;
+        }
+      });
+
+    return amountSpent;
+  }
 };
 
 export default Summary;
@@ -32,7 +63,7 @@ const StyledSummary = styled.div`
   padding: 2rem 2rem;
 
   .leftSummary {
-    // border: 1px solid black;s
+    // border: 1px solid black;
     display: flex;
     flex-direction: column;
   }
