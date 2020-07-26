@@ -21,6 +21,7 @@
     "react-dates": "^21.8.0",
     "react-dom": "^16.13.1",
     "react-highlight-words": "^0.16.0",
+    "react-json-excel": "^1.1.0",
     "react-lottie": "^1.2.3",
     "react-modal": "^3.11.2",
     "react-redux": "^7.2.0",

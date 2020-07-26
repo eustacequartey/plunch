@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import moment from "moment";
 
 const Summary = () => {
   return (
@@ -9,7 +10,7 @@ const Summary = () => {
           <h3>Total</h3>
         </div>
         <div className="bottomLeftSummary">
-          <h6>( expenses for July )</h6>
+          <h6>( expenses for {moment().format("MMMM")} )</h6>
         </div>
       </div>
       <div className="rightSummary">

@@ -1,6 +1,12 @@
 import React, { useRef } from "react";
 import Highlighter from "react-highlight-words";
 import { useQuery, useMutation } from "@apollo/react-hooks";
+import GET_USERS from "../../graphql/queries/users";
+import TOGGLE_ACTIVATION from "../../graphql/mutations/toggleActivated";
+import { SearchOutlined } from "@ant-design/icons";
+import { Button as EverGreenButton } from "evergreen-ui";
+import { CREATE_USER, CREATE_ADMIN } from "../../graphql/mutations/createUser";
+import moment from "moment";
 import {
   Skeleton,
   Table,
@@ -18,11 +24,6 @@ import {
   message,
   notification,
 } from "antd";
-import GET_USERS from "../../graphql/queries/users";
-import TOGGLE_ACTIVATION from "../../graphql/mutations/toggleActivated";
-import { SearchOutlined } from "@ant-design/icons";
-import { Button as EverGreenButton } from "evergreen-ui";
-const { Option } = Select;
 
 function User({}) {
   const { loading, error, data } = useQuery(GET_USERS);
@@ -41,6 +42,18 @@ function Display({ data }) {
   const [visible, setVisible] = React.useState(false);
   const [adminVisible, setAdminVisible] = React.useState(false);
   const [toggleActivation] = useMutation(TOGGLE_ACTIVATION);
+  const [createUser] = useMutation(CREATE_USER);
+  const [createAdmin] = useMutation(CREATE_ADMIN);
+  const [loading, setLoading] = React.useState(false);
+
+  const [firstName, setFirstName] = React.useState("");
+  const [otherNames, setOtherNames] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [phone, setPhone] = React.useState("");
+  const [dob, setDob] = React.useState("");
+  const [address, setAddress] = React.useState("");
+
   let searchInputRef = useRef();
 
   const columns = [
@@ -72,31 +85,45 @@ function Display({ data }) {
       title: "Role",
       dataIndex: "role",
       key: "role",
-
-      render: (data) => <>{data === "NORMAL_USER" ? "Normal User" : "Admin"}</>,
-      ...getColumnSearchProps("lastName"),
-    },
-    {
-      title: "FIRST LOGIN",
-      dataIndex: "hasChangedPassword",
-      key: "hasChangedPassword",
-      render: (data) => <>{data.toString()}</>,
+      render: (data) => <>{data !== "ADMIN" ? "Normal User" : "Admin"}</>,
     },
     {
       title: "ACTIVATED",
       dataIndex: "activated",
       key: "activated",
-      render: (data, item) => (
-        <Switch
-          onChange={() => {
-            console.log(item);
-            // toggleUserActivation(id);
-          }}
-          checked={data}
-        />
-      ),
+      render: (data, item) => {
+        let val = data;
+        return (
+          <Switch
+            size="small"
+            onChange={() => {
+              toggleUserActivation(item.id);
+              item.activated = !item.activated;
+            }}
+            checked={data}
+          />
+        );
+      },
+    },
+    {
+      title: "ADDRESS",
+      dataIndex: "address",
+      key: "address",
+      render: (data) => <>{data.toString()}</>,
+    },
+    {
+      title: "DOB",
+      dataIndex: "dob",
+      key: "dob",
+      render: (data) => <>{moment(data).format("YYYY/MM/DD")}</>,
     },
   ];
+
+  const prefixSelector = (
+    <Form.Item name="prefix" noStyle>
+      +233
+    </Form.Item>
+  );
 
   return (
     <>
@@ -118,7 +145,18 @@ function Display({ data }) {
           New Administrator
         </EverGreenButton>
       </div>
-      <Table bordered dataSource={userData} columns={columns} />
+
+      <Table
+        bordered
+        dataSource={userData}
+        pagination={{
+          defaultCurrent: 1,
+          total: userData.length,
+          pageSize: 5,
+        }}
+        columns={columns}
+      />
+
       <Drawer
         title="Add New User"
         width={720}
@@ -133,7 +171,7 @@ function Display({ data }) {
             <Button onClick={onClose} style={{ marginRight: 8 }}>
               Cancel
             </Button>
-            <Button onClick={onClose} type="primary">
+            <Button onClick={onCreateUser} loading={loading} type="primary">
               Submit
             </Button>
           </div>
@@ -147,12 +185,20 @@ function Display({ data }) {
                 rules={[
                   { required: true, message: "Please enter first name" },
                 ]}>
-                <Input placeholder="Please enter first name" />
+                <Input
+                  placeholder="Please enter first name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item name="otherNames" label="Other Name">
-                <Input placeholder="Please enter other names if any" />
+              <Form.Item name="otherNames" label="Other Names">
+                <Input
+                  placeholder="Please enter other names if any"
+                  value={otherNames}
+                  onChange={(e) => setOtherNames(e.target.value)}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -160,7 +206,11 @@ function Display({ data }) {
                 name="lastName"
                 label="Last Name"
                 rules={[{ required: true, message: "Please enter last name" }]}>
-                <Input placeholder="Please enter last name" />
+                <Input
+                  placeholder="Please enter last name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -176,23 +226,71 @@ function Display({ data }) {
                   },
                   { required: true, message: "Please enter email address" },
                 ]}>
-                <Input placeholder="Please enter last name" />
+                <Input
+                  placeholder="Please enter last name"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <Form.Item
-                name="type"
-                label="Type"
-                rules={[{ required: true, message: "Please choose the type" }]}>
-                <Select placeholder="Please choose the type">
-                  <Option value="private">Private</Option>
-                  <Option value="public">Public</Option>
-                </Select>
+                name="phone"
+                label="Phone Number"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your phone number!",
+                  },
+                ]}>
+                <Input
+                  addonBefore={prefixSelector}
+                  style={{ width: "100%" }}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
               </Form.Item>
             </Col>
-            <Col span={4}>
-              <Form.Item label="Activated">
-                <Switch />
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="dob"
+                label="Date Of Birth"
+                rules={[
+                  { required: true, message: "Enter your Date Of Birth" },
+                ]}>
+                <DatePicker
+                  defaultValue={moment()}
+                  style={{ width: "100%" }}
+                  getPopupContainer={(trigger) => trigger.parentElement}
+                  allowClear={false}
+                  onChange={(date) => console.log(setDob(date.format()))}
+                  disabledDate={(current) =>
+                    current < moment().subtract(50, "years") &&
+                    current.isAfter(moment().endOf("day"))
+                  }
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="address"
+                label="Address"
+                rules={[
+                  {
+                    required: true,
+                    message: "please enter your address",
+                  },
+                ]}>
+                <Input.TextArea
+                  rows={4}
+                  placeholder="please enter your address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -213,7 +311,7 @@ function Display({ data }) {
             <Button onClick={onClose} style={{ marginRight: 8 }}>
               Cancel
             </Button>
-            <Button onClick={onClose} type="primary">
+            <Button onClick={onCreateAdmin} loading={loading} type="primary">
               Submit
             </Button>
           </div>
@@ -227,12 +325,20 @@ function Display({ data }) {
                 rules={[
                   { required: true, message: "Please enter first name" },
                 ]}>
-                <Input placeholder="Please enter first name" />
+                <Input
+                  placeholder="Please enter first name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item name="otherNames" label="Other Name">
-                <Input placeholder="Please enter other names if any" />
+              <Form.Item name="otherNames" label="Other Names">
+                <Input
+                  placeholder="Please enter other names if any"
+                  value={otherNames}
+                  onChange={(e) => setOtherNames(e.target.value)}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -240,7 +346,11 @@ function Display({ data }) {
                 name="lastName"
                 label="Last Name"
                 rules={[{ required: true, message: "Please enter last name" }]}>
-                <Input placeholder="Please enter last name" />
+                <Input
+                  placeholder="Please enter last name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -259,20 +369,64 @@ function Display({ data }) {
                 <Input placeholder="Please enter last name" />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <Form.Item
-                name="type"
-                label="Type"
-                rules={[{ required: true, message: "Please choose the type" }]}>
-                <Select placeholder="Please choose the type">
-                  <Option value="private">Private</Option>
-                  <Option value="public">Public</Option>
-                </Select>
+                name="phone"
+                label="Phone Number"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your phone number!",
+                  },
+                ]}>
+                <Input
+                  addonBefore={prefixSelector}
+                  style={{ width: "100%" }}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
               </Form.Item>
             </Col>
-            <Col span={4}>
-              <Form.Item label="Activated">
-                <Switch />
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="dob"
+                label="Date Of Birth"
+                rules={[
+                  { required: true, message: "Enter your Date Of Birth" },
+                ]}>
+                <DatePicker
+                  defaultValue={moment()}
+                  style={{ width: "100%" }}
+                  getPopupContainer={(trigger) => trigger.parentElement}
+                  allowClear={false}
+                  onChange={(date) => console.log(setDob(date.format()))}
+                  disabledDate={(current) =>
+                    current < moment().subtract(50, "years") &&
+                    current.isAfter(moment().endOf("day"))
+                  }
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="address"
+                label="Address"
+                rules={[
+                  {
+                    required: true,
+                    message: "please enter your address",
+                  },
+                ]}>
+                <Input.TextArea
+                  rows={4}
+                  placeholder="please enter your address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -384,6 +538,62 @@ function Display({ data }) {
   function onClose() {
     setVisible(false);
     setAdminVisible(false);
+  }
+
+  function onCreateUser() {
+    setLoading(true);
+    createUser({
+      variables: {
+        firstName,
+        otherNames,
+        lastName,
+        email,
+        phone,
+        dob,
+        address,
+      },
+    })
+      .then(() => {
+        setLoading(false);
+        message.success("Success");
+        onClose();
+      })
+      .catch((error) => {
+        setLoading(false);
+        onClose();
+        notification["error"]({
+          message: "Error",
+          description: error.message,
+        });
+      });
+  }
+
+  function onCreateAdmin() {
+    setLoading(true);
+    createUser({
+      variables: {
+        firstName,
+        otherNames,
+        lastName,
+        email,
+        phone,
+        dob,
+        address,
+      },
+    })
+      .then(() => {
+        setLoading(false);
+        message.success("Success");
+        onClose();
+      })
+      .catch((error) => {
+        setLoading(false);
+        onClose();
+        notification["error"]({
+          message: "Error",
+          description: error.message,
+        });
+      });
   }
 }
 

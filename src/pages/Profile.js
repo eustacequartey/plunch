@@ -8,7 +8,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { Form, Input, Button, Skeleton, Switch } from "antd";
 
 const defaultOptions = {
-  loop: true,
+  loop: false,
   autoplay: true,
   animationData,
   rendererSettings: {

@@ -67,6 +67,12 @@ const OrderHistory = ({ dataSource }) => {
         filterConfirm: "OK",
         filterReset: "RESET",
       }}
+      bordered={true}
+      pagination={{
+        defaultCurrent: 1,
+        total: dataSource.length,
+        pageSize: 5,
+      }}
       columns={columns}
       dataSource={dataSource}
     />

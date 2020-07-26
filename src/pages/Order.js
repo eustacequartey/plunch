@@ -2,9 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { ConfirmButton } from "../components/general/";
 import { FoodRow, SideRow, ProteinRow } from "../components/general";
-import { Select } from "antd";
+import { Radio } from "antd";
 import Lottie from "react-lottie";
 import animationData from "../assets/lottie/fry.json";
+import { CreateOrder } from "../components/order/";
 
 const defaultOptions = {
   loop: true,
@@ -14,8 +15,6 @@ const defaultOptions = {
     preserveAspectRatio: "xMidYMid slice",
   },
 };
-
-const { Option } = Select;
 
 const Order = () => {
   const [selection, setselection] = React.useState("sides");
@@ -29,17 +28,18 @@ const Order = () => {
         <div>
           <h4>Order</h4>
         </div>
-        <div className="rightHeader">
-          <Select placeholder={selection} onChange={onGenderChange} allowClear>
-            <Option value="mains">Main Dishes</Option>
-            <Option value="sides">Side Dishes</Option>
-            <Option value="proteins">Protein Dishes</Option>
-          </Select>
+        {/* <div className="rightHeader">
+          <Radio.Group defaultValue="sides" size="large" buttonStyle="solid">
+            <Radio.Button value="sides">Side Dishes</Radio.Button>
+            <Radio.Button value="mains">Main Dishes</Radio.Button>
+            <Radio.Button value="proteins">Protein</Radio.Button>
+          </Radio.Group>
           <ConfirmButton />
-        </div>
+        </div> */}
       </div>
 
-      <div>
+      <CreateOrder />
+      {/* <div>
         {!selection && (
           <div>
             <Lottie options={defaultOptions} height={500} width={500} />
@@ -49,7 +49,7 @@ const Order = () => {
         {selection === "mains" && <FoodRow />}
         {selection === "sides" && <SideRow />}
         {selection === "proteins" && <ProteinRow />}
-      </div>
+      </div> */}
     </OrderLayer>
   );
 

@@ -1,54 +1,165 @@
-import React from "react";
-import { DatePicker } from "antd";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { useMutation } from "@apollo/react-hooks";
+import { Steps, Button, message, Drawer, notification } from "antd";
+import MainDishes from "./MainDishes";
+import SideDishes from "./SideDishes";
+import Proteins from "./Proteins";
+import moment from "moment";
+import { AppContext } from "../../context";
+import "react-dates/initialize";
+import "react-dates/lib/css/_datepicker.css";
+import { SingleDatePicker } from "react-dates";
+import CREATE_ORDER from "../../graphql/mutations/order";
 
 const MyOrder = () => {
+  const { Step } = Steps;
+  const { currentOrder, setSideDish } = React.useContext(AppContext);
+  const [createOrder] = useMutation(CREATE_ORDER);
+  const [current, setCurrent] = React.useState(0);
+  const [visible, setVisible] = useState(false);
+  const [date, setDate] = useState(moment());
+  const [focused, setFocused] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const steps = [
+    {
+      title: "Main Dish",
+      content: <MainDishes />,
+    },
+    {
+      title: "Side Dish",
+      content: <SideDishes />,
+    },
+    {
+      title: "Protein",
+      content: <Proteins />,
+    },
+  ];
+
+  function next() {
+    setCurrent(current + 1);
+  }
+
+  function prev() {
+    setCurrent(current - 1);
+  }
+
   return (
     <MyOrderSheet>
-      <div>
-        <h2>My Order</h2>
+      <Steps current={current}>
+        {steps.map((item) => (
+          <Step key={item.title} title={item.title} />
+        ))}
+      </Steps>
+      <div className="steps-content">{steps[current].content}</div>
+      <div className="steps-action">
+        {current < steps.length - 1 && (
+          <Button type="primary" onClick={() => next()}>
+            Next
+          </Button>
+        )}
+        {current === steps.length - 1 && (
+          <Button type="primary" onClick={() => setVisible(true)}>
+            Confirm Order
+          </Button>
+        )}
+        {current > 0 && (
+          <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
+            Previous
+          </Button>
+        )}
       </div>
 
-      <hr />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          //   border: "1px solid black",
-        }}>
+      <Drawer
+        title="Confirm Order"
+        placement="right"
+        closable={false}
+        onClose={handleCancel}
+        visible={visible}
+        width={520}
+        footer={
+          <div
+            style={{
+              textAlign: "right",
+            }}>
+            <Button onClick={handleCancel} style={{ marginRight: 8 }}>
+              Cancel
+            </Button>
+            <Button onClick={onConfirm} type="primary" loading={loading}>
+              {"Confirm Order"}
+            </Button>
+          </div>
+        }>
         <div>
-          <h3 className="header">Main</h3>
-          <p>Groundnut soup</p>
+          <h4>Main Dish:</h4>
+          <p>{currentOrder.mainDish || "Not Selected Yet"}</p>
         </div>
+
         <div>
-          <h3 className="header">Side</h3>
-          <p>Rice</p>
+          <h4>Side Dish:</h4>
+          <p>{currentOrder.sideDish || "Not Selected Yet"}</p>
         </div>
+
         <div>
-          <h3 className="header">Protein</h3>
-          <p>Goat Meat</p>
+          <h4>Protein</h4>
+          <p>{currentOrder.protein || "Not Selected Yet"}</p>
         </div>
-      </div>
-      <div>
-        <p>Price: GHS 5.00</p>
-      </div>
+
+        <div>
+          <h4>Created For</h4>
+          <SingleDatePicker
+            date={date} // momentPropTypes.momentObj or null
+            onDateChange={(date) => setDate(date)} // PropTypes.func.isRequired
+            focused={focused} // PropTypes.bool
+            onFocusChange={({ focused }) => setFocused(focused)} // PropTypes.func.isRequired
+            id="your_unique_id"
+            numberOfMonths={1}
+            isDayBlocked={(day) =>
+              day.isBefore(moment()) || day.isAfter(moment().add(1, "week"))
+            }
+          />
+        </div>
+      </Drawer>
     </MyOrderSheet>
   );
+
+  function onConfirm() {
+    if (currentOrder.mainDish !== "" && currentOrder.sideDish !== "") {
+      setLoading(true);
+      createOrder({
+        variables: {
+          createdFor: date.format(),
+          main: currentOrder.mainDish,
+          side: currentOrder.sideDish,
+          protein: currentOrder.protein,
+        },
+      })
+        .then(() => {
+          setLoading(false);
+          setVisible(false);
+          message.success("success");
+        })
+        .catch((error) => {
+          setLoading(false);
+          notification["error"]({
+            message: "Error",
+            description: error.message,
+          });
+        });
+    } else {
+      message.warning("Fill Order To Completion");
+      setVisible(false);
+    }
+  }
+
+  function handleCancel(e) {
+    setVisible(false);
+  }
 };
 
 export default MyOrder;
 
 const MyOrderSheet = styled.div`
-  background-color: #fff;
-  display: flex;
-  //   border: 1px solid red;
-  flex-direction: column;
-  border-radius: 1rem;
-  padding: 1rem 2rem;
-  margin-left: auto;
-
-  .header {
-    font-size: 1.2rem;
-  }
+  padding: 0 10px;
 `;

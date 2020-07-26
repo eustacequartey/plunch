@@ -6,11 +6,11 @@ import { Card } from "antd";
 const tabListNoTitle = [
   {
     key: "users",
-    tab: "Users",
+    tab: "User Management",
   },
   {
     key: "orders",
-    tab: "Orders",
+    tab: "Order Management",
   },
   {
     key: "food",

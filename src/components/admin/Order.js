@@ -1,10 +1,10 @@
-import React, { useRef } from "react";
-import Highlighter from "react-highlight-words";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { Skeleton, Table, Switch, Empty, Space, Button, Input } from "antd";
+import { Skeleton, Table, Empty, message, DatePicker } from "antd";
 import ORDERS from "../../graphql/queries/order";
-import { SearchOutlined } from "@ant-design/icons";
+import { Button } from "evergreen-ui";
 import moment from "moment";
+import ConvertToExcel from "./ConvertToExcel";
 
 function Order({}) {
   const { loading, error, data } = useQuery(ORDERS);
@@ -17,11 +17,12 @@ function Order({}) {
   }
 }
 
+export default Order;
+
 function Display({ data }) {
   const orderData = data.orders;
-  const [searchText, setSearchText] = React.useState("");
-  const [searchedColumn, setSearchedColumn] = React.useState("");
-  let searchInputRef = useRef();
+  const [printDate, setPrintDate] = useState(moment());
+  const [save, setSave] = useState(false);
 
   const columns = [
     {
@@ -29,7 +30,6 @@ function Display({ data }) {
       dataIndex: "createdAt",
       key: "createdAt",
       render: (data) => <>{moment(data).calendar()}</>,
-      //   ...getColumnSearchProps("createdAt"),
     },
     {
       title: "CREATED FOR",
@@ -47,132 +47,67 @@ function Display({ data }) {
           })}
         </>
       ),
-      //   ...getColumnSearchProps("otherNames"),
     },
     {
       title: "CREATED BY",
       dataIndex: "createdBy",
       key: "createdBy",
       render: (data) => <>{data.firstName + " " + data.lastName}</>,
-      //   ...getColumnSearchProps("createdBy"),
     },
     {
       title: "MAIN DISH",
       dataIndex: "main",
       key: "main",
       render: (data) => <>{data.name}</>,
-      //   ...getColumnSearchProps("main"),
     },
     {
       title: "SIDE DISH",
       dataIndex: "side",
       key: "side",
       render: (data) => <>{data.name}</>,
-      //   ...getColumnSearchProps("side"),
     },
     {
       title: "PROTEIN",
       dataIndex: "protein",
       key: "protein",
       render: (data) => <>{data.name}</>,
-      //   ...getColumnSearchProps("protein"),
     },
     {
       title: "DELIVERED",
       dataIndex: "delivered",
       key: "delivered",
       render: (data) => <>{data.toString()}</>,
-      //   ...getColumnSearchProps("delivered"),
     },
     {
       title: "DELIVERED AT",
       dataIndex: "deliveredAt",
       key: "deliveredAt",
       render: (data) => <>{data ? moment(data).calendar() : "Unavailable"}</>,
-      //   ...getColumnSearchProps("createdAt"),
     },
   ];
 
-  return <Table bordered dataSource={orderData} columns={columns} />;
+  return (
+    <>
+      <div style={{ padding: "1rem 0" }}>
+        <DatePicker onChange={onChange} allowClear={false} />
+        <Button
+          marginLeft={16}
+          marginRight={16}
+          appearance="primary"
+          intent="none"
+          onClick={() => {
+            setSave(!save);
+            message.success("Done");
+          }}>
+          Export To Excel Sheet
+        </Button>
+        {save && <ConvertToExcel />}
+      </div>
+      <Table bordered dataSource={orderData} columns={columns} />
+    </>
+  );
 
-  function getColumnSearchProps(dataIndex) {
-    return {
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div style={{ padding: 8 }}>
-          <Input
-            ref={(node) => {
-              searchInputRef = node;
-            }}
-            placeholder={"Search"}
-            value={selectedKeys[0]}
-            onChange={(e) =>
-              setSelectedKeys(e.target.value ? [e.target.value] : [])
-            }
-            onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            style={{ width: 188, marginBottom: 8, display: "block" }}
-          />
-          <Space>
-            <Button
-              type="primary"
-              onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-              icon={<SearchOutlined />}
-              size="small"
-              style={{ width: 90 }}>
-              Search
-            </Button>
-            <Button
-              onClick={() => handleReset(clearFilters)}
-              size="small"
-              style={{ width: 90 }}>
-              Reset
-            </Button>
-          </Space>
-        </div>
-      ),
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
-      ),
-      onFilter: (value, record) =>
-        record[dataIndex]
-          ? record[dataIndex]
-              .toString()
-              .toLowerCase()
-              .includes(value.toLowerCase())
-          : "",
-      onFilterDropdownVisibleChange: (visible) => {
-        if (visible) {
-          setTimeout(() => searchInputRef.select());
-        }
-      },
-      render: (text) =>
-        searchedColumn === dataIndex ? (
-          <Highlighter
-            highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-            searchWords={[searchText]}
-            autoEscape
-            textToHighlight={text ? text.toString() : ""}
-          />
-        ) : (
-          text
-        ),
-    };
-  }
-
-  function handleSearch(selectedKeys, confirm, dataIndex) {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  }
-
-  function handleReset(clearFilters) {
-    clearFilters();
-    setSearchText("");
+  function onChange(date, dateString) {
+    console.log(date, dateString);
   }
 }
-
-export default Order;

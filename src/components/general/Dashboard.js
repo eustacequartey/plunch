@@ -20,9 +20,6 @@ const Dashboard = (props) => {
     <StyledDashboard>
       <Toolbar>
         <div>
-          <div>
-            <StyledImage src={search} />
-          </div>
           <div className="subgroup">
             <NavLink to="/order" exact={true}>
               <StyledImage src={order} />
@@ -32,18 +29,17 @@ const Dashboard = (props) => {
               <StyledImage src={charts} />
             </NavLink>
 
-            <NavLink to="/admin">
-              <StyledImage src={admin} />
-            </NavLink>
+            {JSON.parse(localStorage.getItem("USER")).role === "ADMIN" && (
+              <NavLink to="/admin">
+                <StyledImage src={admin} />
+              </NavLink>
+            )}
           </div>
         </div>
         <div className="group">
           <StyledImage src={heart} />
           <NavLink to="/profile" exact={true}>
             <StyledImage src={settings} />
-          </NavLink>
-          <NavLink to="/" exact={true}>
-            <StyledImage src={user} />
           </NavLink>
         </div>
       </Toolbar>
@@ -163,6 +159,7 @@ const StyledImage = styled.img`
   width: 1.5rem;
   height: 1.5rem;
   margin: 1rem 0;
+  // background-color: tomato;
 `;
 
 // #262444

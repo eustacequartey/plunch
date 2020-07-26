@@ -21,7 +21,7 @@ const Admin = () => {
     <AdminPageSheet>
       <div className="header">
         <div>
-          <h4>Admin</h4>
+          <h4>Administrator Portal</h4>
         </div>
       </div>
       <Board />

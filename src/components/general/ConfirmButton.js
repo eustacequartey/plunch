@@ -11,7 +11,7 @@ import CREATE_ORDER from "../../graphql/mutations/order";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 
-const ConfirmButton = () => {
+const ConfirmButton = ({ button }) => {
   const { currentOrder } = useContext(AppContext);
   const [createOrder] = useMutation(CREATE_ORDER);
   const [visible, setVisible] = useState(false);
@@ -24,6 +24,7 @@ const ConfirmButton = () => {
       <button className="button1" onClick={() => setVisible(true)}>
         <p className="text">{loading ? "loading" : "Confirm"}</p>
       </button>
+
       <Drawer
         title="Confirm Order"
         placement="right"

@@ -11,6 +11,9 @@ export default gql`
       hasChangedPassword
       role
       activated
+      address
+      dob
+      phone
     }
   }
 `;
