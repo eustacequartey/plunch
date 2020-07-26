@@ -120,7 +120,8 @@ const MyOrder = () => {
             id="your_unique_id"
             numberOfMonths={1}
             isDayBlocked={(day) =>
-              day.isBefore(moment()) || day.isAfter(moment().add(1, "week"))
+              day.isBefore(moment().startOf("day")) ||
+              day.isAfter(moment().add(1, "week"))
             }
           />
         </div>

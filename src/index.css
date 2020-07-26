@@ -1,14 +1,13 @@
 @font-face {
-  font-family: "FiraSans";
-  src: local("FiraSans"),
-    url(./fonts/Inter/static/Inter-Regular.ttf) format("truetype");
+  font-family: "Inter";
+  src: url("./fonts/Inter/static/Inter-Regular.ttf") format("truetype");
 }
 
 body {
   margin: 0;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+    sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
