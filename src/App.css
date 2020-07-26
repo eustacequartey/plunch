@@ -37,26 +37,6 @@
   }
 }
 
-.login {
-  display: flex;
-  height: 100vh;
-}
- 
- 
-
-.right {
-  flex: 3;
-  background-color: #fff;
-  /* background-image: linear-gradient(
-    to top right,
-    rgb(7, 30, 46),
-    rgb(33, 64, 85)
-  ); */
-  padding-top: 145px;
-  padding-bottom: 120px;
- 
-}
-
 .input {
   border-width: 1px;
   border-color: rgb(33, 64, 85);
@@ -67,7 +47,7 @@
   padding: 10px;
   height: 40px;
   width: 500px;
-  background-color: #FDFDFD;
+  background-color: #fdfdfd;
   color: black;
 }
 .submit {
@@ -75,13 +55,13 @@
   border-width: 0;
   padding: 0.3rem 0;
   width: 120px;
-  background-color: #0369BD;
+  background-color: #0369bd;
   margin-top: 40px;
   font-weight: bold;
   font-size: 1rem;
   cursor: pointer;
 }
- 
+
 .logo {
   font-size: 40px;
   color: #fff;
@@ -101,7 +81,6 @@
   font-size: 28px;
   font-weight: 600;
   color: black;
- 
 }
 .prof {
   width: 80px;
@@ -113,11 +92,9 @@
   /* color: rgb(160, 159, 159); */
   padding-top: 40px;
   font-size: small;
-   
 }
 .form {
   padding-left: 485px;
-  
 }
 .checkbox-label {
   color: white;

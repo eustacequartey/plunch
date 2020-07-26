@@ -19,23 +19,22 @@ import {
   Form,
   Col,
   Row,
-  Select,
   DatePicker,
   message,
   notification,
 } from "antd";
 
 function User({}) {
-  const { loading, error, data } = useQuery(GET_USERS);
+  const { loading, error, data, refetch } = useQuery(GET_USERS);
 
   if (loading) return <Skeleton active />;
   if (error) return <Empty description={error.message} />;
   if (data) {
-    return <Display data={data} />;
+    return <Display data={data} refetch={refetch} />;
   }
 }
 
-function Display({ data }) {
+function Display({ data, refetch }) {
   const userData = data.users;
   const [searchText, setSearchText] = React.useState("");
   const [searchedColumn, setSearchedColumn] = React.useState("");
@@ -98,7 +97,6 @@ function Display({ data }) {
             size="small"
             onChange={() => {
               toggleUserActivation(item.id);
-              item.activated = !item.activated;
             }}
             checked={data}
           />
@@ -143,6 +141,14 @@ function Display({ data }) {
           intent="none"
           onClick={() => showDrawer("admin")}>
           New Administrator
+        </EverGreenButton>
+        <EverGreenButton
+          marginRight={16}
+          marginBottom={16}
+          appearance="primary"
+          intent="none"
+          onClick={() => refetch()}>
+          Refresh
         </EverGreenButton>
       </div>
 
@@ -510,7 +516,10 @@ function Display({ data }) {
   }
 
   function toggleUserActivation(id) {
-    toggleActivation({ variables: { id: id } })
+    toggleActivation({
+      variables: { id: id },
+      refetchQueries: [{ query: GET_USERS }],
+    })
       .then(() => {
         message.success("success");
       })

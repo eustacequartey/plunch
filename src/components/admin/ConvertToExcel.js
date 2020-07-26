@@ -1,32 +1,54 @@
 import React from "react";
 import { JsonToExcel } from "react-json-excel";
+import { useQuery } from "@apollo/react-hooks";
+import GET_ORDERS from "../../graphql/queries/orderBatch";
+import moment from "moment";
+import { Spin } from "antd";
 
-const ConvertToExcel = () => {
+const ConvertToExcel = (date) => {
+  const { error, loading, data } = useQuery(GET_ORDERS);
+
   const className = "class-name-for-style";
-  const filename = "Excel-file";
+  const filename = "Order_Sheet";
   const fields = {
-    index: "Index",
-    guid: "GUID",
+    createdAt: "Created At",
+    createdFor: "Created For",
+    main: "Main",
+    side: "Side",
+    protein: "Protein",
+    comments: "Comments",
+    createdBy: "Created By",
   };
   const style = {
     padding: "5px",
   };
-  const data = [
-    { index: 0, guid: "asdf231234" },
-    { index: 1, guid: "wetr2343af" },
-  ];
-  const text = "Convert Json to Excel";
+
+  const text = "Export To Excel";
 
   return (
     <>
-      <JsonToExcel
-        data={data}
-        className={className}
-        filename={filename}
-        fields={fields}
-        style={style}
-        text={text}
-      />
+      {error && <p>Couldn't fetch</p>}
+      {loading && <Spin />}
+      {data && (
+        <JsonToExcel
+          data={data.orderBatch.map((order) => {
+            return {
+              ...order,
+              createdFor: moment(order.createdFor).format("DD/MMM/YYYY"),
+              createdAt: moment(order.createdAt).format("DD/MMM/YYYY"),
+              createdBy: order.createdBy.firstName,
+              main: order.main.name,
+              side: order.side.name,
+              protein: order.protein.name,
+            };
+          })}
+          className={className}
+          filename={filename}
+          fields={fields}
+          style={style}
+          text={text}
+        />
+      )}
     </>
   );
 };

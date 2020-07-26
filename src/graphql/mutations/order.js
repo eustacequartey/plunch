@@ -1,13 +1,20 @@
 import gql from "graphql-tag";
 
 export default gql`
-  mutation($createdFor: String!, $main: ID!, $side: ID!, $protein: ID!) {
+  mutation(
+    $createdFor: String!
+    $main: ID!
+    $side: ID!
+    $protein: ID!
+    $comments: String
+  ) {
     createOrder(
       data: {
         createdFor: $createdFor
         main: $main
         side: $side
         protein: $protein
+        comments: $comments
       }
     ) {
       id

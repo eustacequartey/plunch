@@ -1,10 +1,22 @@
 import React, { useState } from "react";
-import { useQuery } from "@apollo/react-hooks";
-import { Skeleton, Table, Empty, message, DatePicker } from "antd";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import {
+  Skeleton,
+  Table,
+  Empty,
+  message,
+  DatePicker,
+  Button as AntdButton,
+  notification,
+} from "antd";
 import ORDERS from "../../graphql/queries/order";
+import SET_TODAY_DELIVERED from "../../graphql/mutations/setBatchDelivered";
+import SET_DELIVERED from "../../graphql/mutations/setDelivered";
+import MY_ORDERS from "../../graphql/queries/myOrders";
 import { Button } from "evergreen-ui";
 import moment from "moment";
 import ConvertToExcel from "./ConvertToExcel";
+import { CheckCircleOutlined } from "@ant-design/icons";
 
 function Order({}) {
   const { loading, error, data } = useQuery(ORDERS);
@@ -21,7 +33,9 @@ export default Order;
 
 function Display({ data }) {
   const orderData = data.orders;
-  const [printDate, setPrintDate] = useState(moment());
+  const [date, setDate] = useState(moment());
+  const [setDelivered, { loading }] = useMutation(SET_DELIVERED);
+  const [setTodayDelivered, { loading1 }] = useMutation(SET_TODAY_DELIVERED);
   const [save, setSave] = useState(false);
 
   const columns = [
@@ -84,30 +98,98 @@ function Display({ data }) {
       key: "deliveredAt",
       render: (data) => <>{data ? moment(data).calendar() : "Unavailable"}</>,
     },
+    {
+      title: "Action",
+      key: "operation",
+      fixed: "right",
+      width: 100,
+      render: (data, obj) => (
+        <AntdButton
+          ghost={true}
+          onClick={() => {
+            setDelivered({
+              variables: { id: obj.id },
+              refetchQueries: [{ query: ORDERS }],
+            })
+              .then(() => {
+                message.success("Successful");
+              })
+              .catch((error) => {
+                notification["error"]({
+                  message: "Error",
+                  description: error.message,
+                });
+              });
+          }}
+          type="primary"
+          disabled={data.delivered}
+          icon={<CheckCircleOutlined />}
+        />
+      ),
+    },
   ];
 
   return (
     <>
       <div style={{ padding: "1rem 0" }}>
-        <DatePicker onChange={onChange} allowClear={false} />
+        <DatePicker
+          onChange={onChange}
+          allowClear={false}
+          defaultValue={moment()}
+        />
+
+        <Button
+          marginLeft={16}
+          appearance="primary"
+          intent="none"
+          isLoading={loading1}
+          onClick={() => {
+            setTodayDelivered({
+              refetchQueries: [{ query: ORDERS }, { query: MY_ORDERS }],
+            })
+              .then(() => {
+                message.success("Success");
+              })
+              .catch((error) =>
+                notification["error"]({
+                  title: "Error",
+                  description: error.message,
+                })
+              );
+          }}>
+          Set Day Delivered
+        </Button>
+
         <Button
           marginLeft={16}
           marginRight={16}
           appearance="primary"
           intent="none"
           onClick={() => {
-            setSave(!save);
+            // setSave(!save);
             message.success("Done");
           }}>
           Export To Excel Sheet
         </Button>
-        {save && <ConvertToExcel />}
+
+        <ConvertToExcel />
       </div>
-      <Table bordered dataSource={orderData} columns={columns} />
+      <Table
+        bordered
+        dataSource={orderData}
+        scroll={{ x: 1000 }}
+        columns={columns}
+        pagination={{
+          defaultCurrent: 1,
+          total: orderData.length,
+          pageSize: 5,
+        }}
+      />
     </>
   );
 
   function onChange(date, dateString) {
-    console.log(date, dateString);
+    // console.log(date, dateString);
+    setDate(date.format());
   }
 }

@@ -17,7 +17,7 @@ const columns = [
     key: "createdFor",
     render: (data) => (
       <p>
-        {moment().calendar(null, {
+        {moment(data).calendar(null, {
           sameDay: "[Today]",
           nextDay: "[Tomorrow]",
           nextWeek: "dddd",
