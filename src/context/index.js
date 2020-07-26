@@ -70,10 +70,10 @@ const Provider = (props) => {
   }
 
   function onLogout() {
-    client.resetStore();
-    localStorage.removeItem("AUTH_TOKEN");
     localStorage.removeItem("USER");
+    localStorage.removeItem("AUTH_TOKEN");
     toggleLoggedIn();
+    client.clearStore();
   }
 
   function setMainDish(id) {

@@ -21,13 +21,15 @@ const Main = (props) => {
         description="Failed to fetch. Check connection."
       />
     );
-  return <OrderFlowContainer data={data} push={props.history.push} />;
+  return (
+    <OrderFlowContainer data={data.profile.orders} push={props.history.push} />
+  );
 };
 
 function OrderFlowContainer({ data, push }) {
   return (
     <OrderFlowContainerSheet>
-      {data.profile.orders.length === 0 && (
+      {data.length === 0 && (
         <Empty
           image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
           imageStyle={{
@@ -43,7 +45,7 @@ function OrderFlowContainer({ data, push }) {
           }
         />
       )}
-      {data.profile.orders.map((order, key) => {
+      {data.slice(Math.max(data.length - 4, 0)).map((order, key) => {
         return <OrderFlow {...order} key={key} />;
       })}
     </OrderFlowContainerSheet>

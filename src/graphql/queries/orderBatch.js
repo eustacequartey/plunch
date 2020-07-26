@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export default gql`
-  {
-    orders {
+  query($date: String) {
+    orderBatch(date: $date) {
       id
       createdAt
       createdFor
@@ -21,7 +21,6 @@ export default gql`
       protein {
         name
       }
-      comments
       delivered
       deliveredAt
     }

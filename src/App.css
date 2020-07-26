@@ -37,10 +37,6 @@
   }
 }
 
-.login {
-  display: flex;
-  height: 100vh;
-}
 .left {
   display: flex;
   justify-content: center;

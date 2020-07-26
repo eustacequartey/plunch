@@ -1,27 +1,19 @@
 import React, { useState, useContext } from "react";
 import logo from "../../assets/images/plogosmall.png";
 import { Spinner } from "evergreen-ui";
-import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import { AppContext } from "../../context/";
-import { notification, Space } from "antd";
+import { notification, Space, Form, Input, Button } from "antd";
+import styled from "styled-components";
+import LOGIN from "../../graphql/mutations/login";
 
-const LOGIN = gql`
-  mutation LOGIN($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-      user {
-        id
-        email
-        firstName
-        lastName
-        activated
-        hasChangedPassword
-        role
-      }
-    }
-  }
-`;
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
 
 function _saveUserData(token, user) {
   localStorage.setItem("AUTH_TOKEN", token);
@@ -34,77 +26,69 @@ async function _confirm(data) {
 }
 
 const Login = () => {
-  return (
-    <div className="login">
-      {/* <LeftPane /> */}
-      <RightPane />
-    </div>
-  );
-};
-
-const LeftPane = () => {
-  return (
-    <div className="left">
-      <div>
-        <div className="top-info">
-          <img src={logo} className="logo-icon" />
-          <h1 className="logo">PERSOL LUNCH</h1>
-        </div>
-        <div className="info">
-          <p className="tagline">Tag line goes here!</p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const RightPane = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [login, { loading }] = useMutation(LOGIN);
   const { toggleLoggedIn } = useContext(AppContext);
 
   return (
-    <div className="right">
-      <form
-        className="form"
-        onSubmit={(e) => {
-          loginFunction(e);
-        }}>
-        <div className="heading">Login Portal</div>
-        <div>
-          <p className="label">EMAIL</p>
-          <input
-            className="input"
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="eg: xyz@persol.net"
-            required
-          />
+    <LoginSheet>
+      <div className="innerLogin">
+        <div className="innerLoginHeader">
+          <img src={logo} />
         </div>
 
-        <div>
-          <p className="label">PASSWORD</p>
-          <input
-            className="input"
-            type="password"
+        <Form
+          {...layout}
+          name="basic"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}>
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Please input your email!" },
+              {
+                type: "email",
+                message: "You must input a valid email address",
+              },
+            ]}>
+            <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+          </Form.Item>
+
+          <Form.Item
+            label="Password"
             name="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+            rules={[{ required: true, message: "Please input your password" }]}>
+            <Input.Password
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Item>
 
-        <button aria-hidden="true" className="submit" type="submit">
-          {loading ? "loading" : "SUBMIT"}
-        </button>
-      </form>
-    </div>
+          <Form.Item {...tailLayout}>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </LoginSheet>
   );
 
-  function loginFunction(e) {
-    e.preventDefault();
+  async function onFinish(values) {
+    console.log("Success:", values);
+    await onSubmit();
+  }
+
+  async function onSubmit() {
+    if (email === "" || password === "") {
+      return notification["error"]({
+        message: "Error",
+        description: "All fields are required",
+      });
+    }
 
     login({ variables: { email, password } })
       .then(({ data }) => {
@@ -119,10 +103,30 @@ const RightPane = () => {
       });
   }
 
-  function reset() {
-    setEmail("");
-    setPassword("");
+  function onFinishFailed(errorInfo) {
+    console.log(errorInfo);
   }
 };
 
 export default Login;
+
+const LoginSheet = styled.div`
+  display: flex;
+  min-height: 100vh;
+  background-color: #edf2f7;
+  justify-content: center;
+  align-items: center;
+
+  .innerLogin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    // border: 1px solid black;
+
+    .innerLoginHeader {
+      padding: 0 0 2rem 0;
+      // background-color: tomato;
+    }
+  }
+`;

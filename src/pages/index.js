@@ -5,3 +5,4 @@ export { default as Users } from "./Users";
 export { default as Profile } from "./Profile";
 export { default as OrderHistory } from "./OrderHistory";
 export { default as Admin } from "./Admin";
+export { default as PageNotFound } from "./PageNotFound";

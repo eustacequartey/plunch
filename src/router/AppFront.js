@@ -1,22 +1,36 @@
 import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { Home, Order, Profile, Users, OrderHistory, Admin } from "../pages";
-
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import {
+  Order,
+  Profile,
+  Users,
+  OrderHistory,
+  Admin,
+  PageNotFound,
+} from "../pages";
+import { AppContext } from "../context/";
 import { Dashboard } from "../components/general";
 
-const Router = () => (
-  <BrowserRouter>
-    <Switch>
+const Router = () => {
+  return (
+    <BrowserRouter>
       <Dashboard>
-        <Route path="/" exact={true} component={Order} />
-        <Route path="/order" component={Order} />
-        <Route path="/users" component={Users} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/history" component={OrderHistory} />
-        <Route path="/admin" component={Admin} />
+        <Switch>
+          <Route path="/" exact={true}>
+            <Redirect to="/order" />
+          </Route>
+          <Route path="/order" component={Order} />
+          <Route path="/users" component={Users} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/history" component={OrderHistory} />
+          {JSON.parse(localStorage.getItem("USER")).role === "ADMIN" && (
+            <Route path="/admin" component={Admin} />
+          )}
+          <Route component={PageNotFound} />
+        </Switch>
       </Dashboard>
-    </Switch>
-  </BrowserRouter>
-);
+    </BrowserRouter>
+  );
+};
 
 export default Router;

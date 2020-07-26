@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useMutation } from "@apollo/react-hooks";
-import { Steps, Button, message, Drawer, notification } from "antd";
+import { Steps, Button, message, Drawer, notification, Input } from "antd";
 import MainDishes from "./MainDishes";
 import SideDishes from "./SideDishes";
 import Proteins from "./Proteins";
@@ -11,6 +11,9 @@ import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 import { SingleDatePicker } from "react-dates";
 import CREATE_ORDER from "../../graphql/mutations/order";
+import MY_ORDERS from "../../graphql/queries/myOrders";
+import ALL_ORDERS from "../../graphql/queries/order";
+const { TextArea } = Input;
 
 const MyOrder = () => {
   const { Step } = Steps;
@@ -21,6 +24,7 @@ const MyOrder = () => {
   const [date, setDate] = useState(moment());
   const [focused, setFocused] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [comments, setComments] = useState("");
 
   const steps = [
     {
@@ -120,6 +124,15 @@ const MyOrder = () => {
             }
           />
         </div>
+
+        <div style={{ margin: "1rem 0 0 0 " }}>
+          <h4>Comments</h4>
+          <TextArea
+            rows={8}
+            value={comments}
+            onChange={(e) => setComments(e.target.value)}
+          />
+        </div>
       </Drawer>
     </MyOrderSheet>
   );
@@ -133,7 +146,9 @@ const MyOrder = () => {
           main: currentOrder.mainDish,
           side: currentOrder.sideDish,
           protein: currentOrder.protein,
+          comments,
         },
+        refetchQueries: [{ query: MY_ORDERS }, { query: ALL_ORDERS }],
       })
         .then(() => {
           setLoading(false);

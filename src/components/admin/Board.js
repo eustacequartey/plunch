@@ -21,7 +21,7 @@ const tabListNoTitle = [
 const contentListNoTitle = {
   users: <User />,
   orders: <Order />,
-  food: <p>project content</p>,
+  food: <p>Add Food Coming Soon</p>,
 };
 
 function TabCard() {
@@ -37,7 +37,7 @@ function TabCard() {
         style={{ width: "100%" }}
         tabList={tabListNoTitle}
         activeTabKey={noTitleKey}
-        tabBarExtraContent={<a href="#">More</a>}
+        // tabBarExtraContent={<a href="#">More</a>}
         onTabChange={(key) => {
           onTabChange(key, "noTitleKey");
         }}>
