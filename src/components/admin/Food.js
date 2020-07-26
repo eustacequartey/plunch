@@ -1,32 +1,32 @@
-import React from "react";
-import User from "../general/User";
-import Order from "./Order";
-import Food from "./Food";
+import React, { useState } from "react";
 import { Card } from "antd";
+import MainDishes from "./MainDishes";
+import ProteinDishes from "./ProteinDishes";
+import SideDishes from "./SideDishes";
 
 const tabListNoTitle = [
   {
-    key: "users",
-    tab: "User Management",
+    key: "main",
+    tab: "Main Dishes",
   },
   {
-    key: "orders",
-    tab: "Order Management",
+    key: "side",
+    tab: "Side Dishes",
   },
   {
-    key: "food",
-    tab: "Food Management",
+    key: "protein",
+    tab: "Proteins",
   },
 ];
 
 const contentListNoTitle = {
-  users: <User />,
-  orders: <Order />,
-  food: <Food />,
+  main: <MainDishes />,
+  side: <SideDishes />,
+  protein: <ProteinDishes />,
 };
 
-function TabCard() {
-  const [noTitleKey, setNoTitleKey] = React.useState("users");
+function Food() {
+  const [noTitleKey, setNoTitleKey] = useState("main");
 
   function onTabChange(key, type) {
     setNoTitleKey(key);
@@ -47,4 +47,4 @@ function TabCard() {
   );
 }
 
-export default TabCard;
+export default Food;

@@ -6,9 +6,6 @@ export default gql`
       id
       name
       type
-      # orders {
-      #   id
-      # }
     }
   }
 `;
